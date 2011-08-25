@@ -26,7 +26,7 @@ module Sinatra
       action = "/#{action}" if action.is_a? Symbol
         
       out = tag(:form, nil, {:action => action, :method => method.to_s.upcase}.merge(options)) + method_input
-      out << nest(action, &block) if block_given?
+      out << nest(action, &block) + '</form>' if block_given?
       out
     end
 
@@ -69,13 +69,13 @@ module Sinatra
     end
 
     # Form submit tag.
-    def submit(obj, value="", options={})
-      single_tag :input, options.merge(:type => "submit", :value => value == "" ? obj : value)
+    def submit(value='Submit', options={})
+      single_tag :input, {:name => "submit", :type => "submit", :value => value}.merge(options)
     end
 
     # Form reset tag.  Does anyone use these anymore?
-    def reset(obj, value="", options={})
-      single_tag :input, options.merge(:type => "reset", :value => value == "" ? obj : value)
+    def reset(value='Reset', options={})
+      single_tag :input, {:name => "reset", :type => "reset", :value => value}.merge(options)
     end
 
     # Form checkbox.  Specify an array of values to get a checkbox group.

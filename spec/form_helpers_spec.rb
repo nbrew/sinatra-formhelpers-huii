@@ -38,7 +38,10 @@ describe "Sinatra::FormHelpers methods" do
     fh.form(:person, :create) do |f|
       f.text(:first_name)
       f.text(:last_name)
-    end.should == '<form action="/person" method="POST"><input id="person_last_name" name="person[last_name]" type="text" value="" />'
+    end.should == '<form action="/person" method="POST">' + 
+      '<input id="person_first_name" name="person[last_name]" type="text" value="" />'
+      '<input id="person_last_name" name="person[last_name]" type="text" value="" />' +
+      '</form>'
   end
   it 'nests form elements arbitrarily' do
     fh.nest(:person) do |n|
@@ -62,6 +65,14 @@ describe "Sinatra::FormHelpers methods" do
   end
   it 'renders a minimal textarea tag' do
     fh.textarea(:r).should == %q(<textarea id="r" name="r"></textarea>)
+  end
+  it 'renders a submit tag' do
+    fh.submit.should == %q(<input name="submit" type="submit" value="Submit" />)
+    fh.submit("Send!").should == %q(<input name="submit" type="submit" value="Send!" />)
+  end
+  it 'renders a reset tag' do
+    fh.reset.should == %q(<input name="reset" type="reset" value="Reset" />)
+    fh.reset("Blark").should == %q(<input name="reset" type="reset" value="Blark" />)
   end
 end
 
@@ -152,11 +163,11 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders an input tag with a submit type' do
     app.get '/sub' do
-      erb "<%= submit :person, 'Create' %>"
+      erb "<%= submit 'Create' %>"
     end
     
     get '/sub'
-    last_response.body.should == '<input type="submit" value="Create" />'
+    last_response.body.should == '<input name="submit" type="submit" value="Create" />'
   end
   
   it 'renders an input tag with a submit type with single arg' do
@@ -165,7 +176,7 @@ describe "Sinatra::FormHelpers in app" do
     end
     
     get '/create'
-    last_response.body.should == '<input type="submit" value="Create" />'
+    last_response.body.should == '<input name="submit" type="submit" value="Create" />'
   end
   
   it 'renders an input tag with a checkbox type' do

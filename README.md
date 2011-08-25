@@ -31,10 +31,17 @@ Views
 -----
 In your views, use these helpers to dynamically create form and HTML elements.  Here's an example in ERB:
 
-    <p>Fill out the below form and click "Submit".</p>
+    <p>Fill out the below form to sign up.</p>
 
     <%= form('/users', :create) %>
+    
+    <%= text(:user, :first_name) %>
+    <%= text(:user, :last_name) %>
+    <%= text(:user, :gender, ['M', 'F']) %>
 
+    <%= textarea(:user, :signature) %>
+
+    <%= submit >
               
 Author
 ------
