@@ -239,20 +239,43 @@ describe "Sinatra::FormHelpers in app" do
     last_response.body.should == %q(<form action="/person" method="POST">)
   end
 
-  it 'renders a form_for style tag' do
-    app.get '/form_for' do
+#   it 'renders a form_for style tag' do
+#     app.get '/form_for' do
+#       erb <<-EndTemplate
+# <% form(:person, :create) do |f| %>
+#   <%= f.text(:login) %>
+#   <%= f.password(:password) %>
+#   <%= submit %>
+# <% end %>
+# EndTemplate
+#     end
+#       
+#     get '/form_for'
+#     last_response.body.should == %q(<form action="/person" method="POST">)
+#   end
+
+
+  it 'renders a fieldset group' do
+    app.get '/fieldset' do
       erb <<-EndTemplate
-<%= form(:person, :create) do |f| %>
-  <%= f.text(:login) %>
+<% fieldset(:user) do |f| %>
+  <%= f.text(:first_name) %>
+  <%= f.text(:last_name) %>
+
+  <%= f.text(:email, :size => 40) %>
+
   <%= f.password(:password) %>
-  <%= submit %>
+  <%= f.password(:confirm_password) %>
+
+  <%= f.radio(:gender, ['M', 'F']) %>
 <% end %>
+<%= submit %>
 EndTemplate
-    end
-      
-    get '/form_for'
-    last_response.body.should == %q(<form action="/person" method="POST">)
+end
+
+    get '/fieldset'
+    last_response.body.should == %Q(  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" />\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" />\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" /><input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" /><input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" value=\"\" /><input id=\"user_gender_m\" name=\"user[gender]\" type=\"radio\" value=\"M\" /> <input id=\"user_gender_f\" name=\"user[gender]\" type=\"radio\" value=\"F\" />\n<input name=\"submit\" type=\"submit\" value=\"Submit\" />)
   end
-  
+
 end
 

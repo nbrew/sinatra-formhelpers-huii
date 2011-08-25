@@ -50,29 +50,28 @@ In your views, use these helpers to dynamically create form and HTML elements.  
 
     <%= submit %>
 
-These helpers also support Rails <code>form_for</code> like functionality, but *without* *super* *magic*:
+Note that unlike the super-magic Rails <code>form_for</code> method, this <code>form()</code> helper takes a URL.
 
-    <%= form(:user, :create, :action => '/users') do |f| %>
+To reduce repetition, you can also use fieldset() to prefix fields with a namespace:
 
-    <%= text(:user, :first_name) %>
-    <%= text(:user, :last_name) %>
+    <%= form('/users', :create) %>
 
-    <%= text(:user, :email, :size => 40) %>
+    <% fieldset(:user) do |f| %>
+      <%= f.text(:first_name) %>
+      <%= f.text(:last_name) %>
 
-    <%= password(:user, :password) %>
-    <%= password(:user, :confirm_password) %>
+      <%= f.text(:email, :size => 40) %>
 
-    <%= radio(:user, :gender, ['M', 'F']) %>
+      <%= f.password(:password) %>
+      <%= f.password(:confirm_password) %>
+
+      <%= f.radio(:gender, ['M', 'F']) %>
+    <% end %>
 
     <%= submit %>
 
+This will create fields named "user[first\_name]", "user[last\_name]", and so forth.
 
-
-
-    
-
-
-              
 Author
 ------
 Copyright (c) 2011 [Nate Wiger](http://nateware.com).  Based on initial efforts (c) 2009 twilson63.

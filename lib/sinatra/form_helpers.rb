@@ -24,15 +24,16 @@ module Sinatra
         end
       end
       action = "/#{action}" if action.is_a? Symbol
-        
+
       out = tag(:form, nil, {:action => action, :method => method.to_s.upcase}.merge(options)) + method_input
       out << fieldset(action, &block) + '</form>' if block_given?
       out
     end
 
     def fieldset(obj, legend=nil, &block)
-      o = yield Fieldset.new(self, obj)
-      '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + o + '</fieldset>'
+      raise ArgumentError, "Missing block to fieldset()" unless block_given?
+      out = yield Fieldset.new(self, obj)
+      '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + out + '</fieldset>'
     end
     
     # Link to a URL
@@ -179,8 +180,6 @@ module Sinatra
         @outbuf << @parent.send(meth, @name, *args)
       end
     end
-    
-    
   end
 
   helpers FormHelpers
