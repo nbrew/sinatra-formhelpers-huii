@@ -9,35 +9,33 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "sinatra-formhelpers"
-    gem.summary = %Q{use basic form helpers for generic form management}
-    gem.email = "tom@jackrussellsoftware.com"
-    gem.homepage = "http://github.com/twilson63/sinatra-formhelpers"
-    gem.authors = ["twilson63"]
+    gem.summary = %Q{Form helpers for Sinatra}
+    gem.description = %Q{Simple, lightweight form helpers for Sinatra. Based on initial efforts by twilson63.}
+    gem.email = "nate@wiger.org"
+    gem.homepage = "http://github.com/nateware/sinatra-formhelpers"
+    gem.authors = ["Nate Wiger"]
+    gem.add_development_dependency "bacon", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-    gem.add_runtime_dependency 'sinatra', ['>= 0.9.2.0']
-    gem.add_runtime_dependency 'activesupport', ['>= 2.3.2.0']
-    
-    
   end
   
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-task :spec => :test
 
 # SPECS ===============================================================
 
-Rake::TestTask.new(:test) do |t|
-  t.test_files = FileList['test/*_test.rb']
-  t.ruby_opts = ['-rubygems'] if defined? Gem
+task :test => :spec
+desc "run all the specs"
+task :spec do
+  sh "bacon spec/*_spec.rb"
 end
 
 begin
   require 'rcov/rcovtask'
   Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
+    test.libs << 'spec'
+    test.pattern = 'spec/**/*_spec.rb'
     test.verbose = true
   end
 rescue LoadError
@@ -51,15 +49,10 @@ task :default => :test
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
-  if File.exist?('VERSION.yml')
-    config = YAML.load(File.read('VERSION.yml'))
-    version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
-  else
-    version = ""
-  end
-  
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "test-gem #{version}"
+  rdoc.title = "Sinatra::FormHelpers #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
