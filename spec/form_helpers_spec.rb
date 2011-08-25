@@ -36,8 +36,8 @@ describe "Sinatra::FormHelpers methods" do
   end
   it 'renders a nested form tag' do
     fh.form(:person, :create) do |f|
-      f.text(:first_name)
-      f.text(:last_name)
+      f.input(:first_name)
+      f.input(:last_name)
     end.should == '<form action="/person" method="POST"><fieldset>' + 
       '<input id="person_first_name" name="person[first_name]" type="text" value="" />' +
       '<input id="person_last_name" name="person[last_name]" type="text" value="" />' +
@@ -68,7 +68,7 @@ describe "Sinatra::FormHelpers methods" do
       '<input id="person_gender_f" name="person[gender]" type="checkbox" value="F" />'
   end
   it 'renders a minimal text tag' do
-    fh.text(:q).should == %q(<input id="q" name="q" type="text" value="" />)
+    fh.input(:q).should == %q(<input id="q" name="q" type="text" value="" />)
   end
   it 'renders a minimal textarea tag' do
     fh.textarea(:r).should == %q(<textarea id="r" name="r"></textarea>)
@@ -80,6 +80,10 @@ describe "Sinatra::FormHelpers methods" do
   it 'renders a reset tag' do
     fh.reset.should == %q(<input name="reset" type="reset" value="Reset" />)
     fh.reset("Blark").should == %q(<input name="reset" type="reset" value="Blark" />)
+  end
+  it 'supports multiple values for checkboxes' do
+    fh.params = {:user => {'devices' => ['iPhone', 'iPad'] }}
+    fh.checkbox(:user, :devices, ['iPhone', 'iPad', 'iPod', 'iPoop']).should == ' = BLARK ='
   end
 end
 
@@ -102,7 +106,7 @@ describe "Sinatra::FormHelpers in app" do
     last_response.body.should == %q(<label for="person_first_name">First Name</label>)
   end
 
-  it 'renders a label tag with display text' do
+  it 'renders a label tag with display input' do
     app.get '/hello' do
       erb "<%= label :person, :first_name, 'Hello World'%>"
     end
@@ -113,7 +117,7 @@ describe "Sinatra::FormHelpers in app" do
   
   it 'renders an input tag type text without @params' do
     app.get '/text' do
-      erb "<%= text :person, :first_name %>"
+      erb "<%= input :person, :first_name %>"
     end
 
     get '/text'
@@ -123,7 +127,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders an input tag type text with single arg' do
     app.get '/q' do
-      erb "<%= text :q %>"
+      erb "<%= input :q %>"
     end
   
     get '/q'
@@ -133,7 +137,7 @@ describe "Sinatra::FormHelpers in app" do
   it 'renders an input tag type text with @params' do
     app.get '/tom' do
       @params = { :person => {"first_name" => "Tom"}}
-      erb "<%= text :person, :first_name %>"
+      erb "<%= input :person, :first_name %>"
     end
         
     get '/tom'
@@ -243,7 +247,7 @@ describe "Sinatra::FormHelpers in app" do
 #     app.get '/form_for' do
 #       erb <<-EndTemplate
 # <% form(:person, :create) do |f| %>
-#   <%= f.text(:login) %>
+#   <%= f.input(:login) %>
 #   <%= f.password(:password) %>
 #   <%= submit %>
 # <% end %>
@@ -254,15 +258,14 @@ describe "Sinatra::FormHelpers in app" do
 #     last_response.body.should == %q(<form action="/person" method="POST">)
 #   end
 
-
   it 'renders a fieldset group' do
     app.get '/fieldset' do
       erb <<-EndTemplate
 <% fieldset(:user) do |f| %>
-  <%= f.text(:first_name) %>
-  <%= f.text(:last_name) %>
+  <%= f.input(:first_name) %>
+  <%= f.input(:last_name) %>
 
-  <%= f.text(:email, :size => 40) %>
+  <%= f.input(:email, :size => 40) %>
 
   <%= f.password(:password) %>
   <%= f.password(:confirm_password) %>

@@ -6,7 +6,7 @@ common form and HTML tags.
 
     link "google", "http://www.google.com"  # <a href="http://www.google.com">google</a>
     label :person, :first_name              # <label for="person_first_name">First Name</label>
-    text :person, :first_name               # <input name="person[first_name]" id="person_first_name" type="text" />
+    input :person, :first_name              # <input name="person[first_name]" id="person_first_name" type="text" />
 
 There are also helpers for: form, textarea, submit, image, radio, checkbox, and select
 
@@ -38,10 +38,10 @@ In your views, use these helpers to dynamically create form and HTML elements.  
 
     <%= form('/users', :create) %>
     
-    <%= text(:user, :first_name) %>
-    <%= text(:user, :last_name) %>
+    <%= input(:user, :first_name) %>
+    <%= input(:user, :last_name) %>
 
-    <%= text(:user, :email, :size => 40) %>
+    <%= input(:user, :email, :size => 40) %>
 
     <%= password(:user, :password) %>
     <%= password(:user, :confirm_password) %>
@@ -57,10 +57,10 @@ To reduce repetition, you can also use fieldset() to prefix fields with a namesp
     <%= form('/users', :create) %>
 
     <% fieldset(:user) do |f| %>
-      <%= f.text(:first_name) %>
-      <%= f.text(:last_name) %>
+      <%= f.input(:first_name) %>
+      <%= f.input(:last_name) %>
 
-      <%= f.text(:email, :size => 40) %>
+      <%= f.input(:email, :size => 40) %>
 
       <%= f.password(:password) %>
       <%= f.password(:confirm_password) %>

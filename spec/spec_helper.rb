@@ -9,12 +9,13 @@ require 'sinatra/form_helpers'
 
 class TestFormHelpers
   include Sinatra::FormHelpers
-  def params
-    {}
+  attr_accessor :params
+  def initialize
+    @params = {}
   end
 end
 def fh
-  TestFormHelpers.new
+  @fh ||= TestFormHelpers.new
 end
 
 class Application < Sinatra::Base

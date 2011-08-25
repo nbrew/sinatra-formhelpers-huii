@@ -7,9 +7,8 @@ module Sinatra
     # link "jackhq", "http://www.jackhq.com"
     # 
     # label :person, :first_name
-    # text :person, :first_name
-    # 
-    # area :person, :notes
+    # input :person, :first_name
+    # textarea :person, :notes
     # 
     # etc.
     def form(action, method=:get, options={}, &block)
@@ -52,7 +51,7 @@ module Sinatra
     end
 
     # Form text input.  Specify the value as :value => 'foo'
-    def text(obj, field=nil, options={})
+    def input(obj, field=nil, options={})
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
         :type => "text", :id => field.nil? ? obj : "#{obj}_#{field}",
@@ -93,9 +92,13 @@ module Sinatra
     # Form checkbox.  Specify an array of values to get a checkbox group.
     def checkbox(obj, field, values, options={})
       join = options.delete(:join) || ' '
+      labs = options.delete(:label)
+      vals = param_or_default(obj, field, [])
       Array(values).collect do |val|
-        single_tag :input, options.merge(:type => "checkbox", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
-                                         :name => "#{obj}[#{field}]", :value => val)
+        single_tag(:input, options.merge(:type => "checkbox", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
+                                         :name => "#{obj}[#{field}]", :value => val,
+                                         :checked => vals.include?(val) ? 'checked' : nil)) +
+        (labs.nil? || labs == true ? label(obj, "#{field}_#{val.to_s.downcase}", val) : '')
       end.join(join)
     end
     
@@ -104,9 +107,13 @@ module Sinatra
       #content = @params[obj] && @params[obj][field.to_s] == value ? "true" : ""    
       # , :checked => content
       join = options.delete(:join) || ' '
+      labs = options.delete(:label)
+      vals = param_or_default(obj, field, [])
       Array(values).collect do |val|
-        single_tag :input, options.merge(:type => "radio", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
-                                         :name => "#{obj}[#{field}]", :value => val)
+        single_tag(:input, options.merge(:type => "radio", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
+                                         :name => "#{obj}[#{field}]", :value => val,
+                                         :checked => vals.include?(val) ? 'checked' : nil)) +
+        (labs.nil? || labs == true ? label(obj, "#{field}_#{val.to_s.downcase}", val) : '')
       end.join(join)
     end
 
@@ -164,6 +171,7 @@ module Sinatra
     def hash_to_html_attrs(options={})
       html_attrs = ""
       options.keys.sort.each do |key|
+        next if options[key].nil?  # do not include empty attributes
         html_attrs << %Q(#{key}="#{fast_escape_html(options[key])}" )
       end
       html_attrs.chop
@@ -173,11 +181,10 @@ module Sinatra
       def initialize(parent, name)
         @parent = parent
         @name   = name.to_s.gsub(/\W+/,'')
-        @outbuf = ''
       end
 
       def method_missing(meth, *args)
-        @outbuf << @parent.send(meth, @name, *args)
+        @parent.send(meth, @name, *args)
       end
     end
   end
