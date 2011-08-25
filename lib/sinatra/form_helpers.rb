@@ -13,9 +13,8 @@ module Sinatra
     # 
     # etc.
     def form(action, method=:get, options={}, &block)
-      url = action
       method_input = ''
-      if action.is_a? Symbol
+      if method.is_a? Symbol
         case method.to_s.downcase
         when 'delete', 'update'
           method_input = %Q(<input type="hidden" name="_method" value="#{method}" />)
@@ -23,49 +22,63 @@ module Sinatra
         when 'create'
           method = :post
         end
-        url = "/#{action}"
       end
+      action = "/#{action}" if action.is_a? Symbol
         
-      out = tag(:form, nil, {:action => url, :method => method.to_s.upcase}.merge(options)) + method_input
-      if block_given?
-        @form_object = action
-        out << yield
-        @form_object = nil
-      end
+      out = tag(:form, nil, {:action => action, :method => method.to_s.upcase}.merge(options)) + method_input
+      out << nest(action, &block) if block_given?
       out
     end
-    
+
+    def nest(obj, &block)
+      yield(NestTag.new(self, obj))
+    end
+
+    # Link to a URL
     def link(content, href=content, options={})
       tag :a, content, options.merge(:href => href)  
     end
 
-    def label(obj, field, display = "", options={})
-      tag :label, (display.nil? || display == '') ? titleize(field.to_s) : display, options.merge(:for => "#{obj}_#{field}")
-    end
-    
-    def text(obj, field="", options={})
-      content = params[obj] ? params[obj][field.to_s] : ""       
-      id = 
-      single_tag :input, options.merge(
-        :type => "text", :id => field == "" ? obj : "#{obj}_#{field}",
-        :name => field == "" ? obj : "#{obj}[#{field}]",
-        :value => content
-      )
-    end
-    
-    def textarea(obj, field, options={})
-      content = params[obj] ? params[obj][field.to_s] : ""        
-      tag :textarea, content, options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
-    end
-    
+    # Link to an image
     def image(src, options={})
       single_tag :img, options.merge(:src => src)
     end
-    
+
+    # Form field label
+    def label(obj, field, display = "", options={})
+      tag :label, (display.nil? || display == '') ? titleize(field.to_s) : display, options.merge(:for => "#{obj}_#{field}")
+    end
+
+    # Form text input.  Specify the value as :value => 'foo'
+    def text(obj, field=nil, options={})
+      value = param_or_default(obj, field, options[:value])
+      single_tag :input, options.merge(
+        :type => "text", :id => field.nil? ? obj : "#{obj}_#{field}",
+        :name => field.nil? ? obj : "#{obj}[#{field}]",
+        :value => value
+      )
+    end
+
+    # Form textarea box.
+    def textarea(obj, field=nil, content='', options={})
+      content = param_or_default(obj, field, content)
+      tag :textarea, content, options.merge(
+        :id   => field.nil? ? obj : "#{obj}_#{field}",
+        :name => field.nil? ? obj : "#{obj}[#{field}]"
+      )
+    end
+
+    # Form submit tag.
     def submit(obj, value="", options={})
       single_tag :input, options.merge(:type => "submit", :value => value == "" ? obj : value)
     end
 
+    # Form reset tag.  Does anyone use these anymore?
+    def reset(obj, value="", options={})
+      single_tag :input, options.merge(:type => "reset", :value => value == "" ? obj : value)
+    end
+
+    # Form checkbox.  Specify an array of values to get a checkbox group.
     def checkbox(obj, field, values, options={})
       join = options.delete(:join) || ' '
       Array(values).collect do |val|
@@ -74,6 +87,7 @@ module Sinatra
       end.join(join)
     end
     
+    # Form radio input.  Specify an array of values to get a radio group.
     def radio(obj, field, values, options={})
       #content = @params[obj] && @params[obj][field.to_s] == value ? "true" : ""    
       # , :checked => content
@@ -83,7 +97,8 @@ module Sinatra
                                          :name => "#{obj}[#{field}]", :value => val)
       end.join(join)
     end
-    
+
+    # Form select dropdown.  Currently only single-select (not multi-select) is supported.
     def select(obj, field, values, options={})
       content = ""
       Array(values).each do |val|
@@ -96,12 +111,13 @@ module Sinatra
       tag :select, content, options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
     end
     
+    # Form hidden input.  Specify value as :value => 'foo'
     def hidden(obj, field="", options={})
-      content = params[obj] && params[obj][field.to_s] == value ? "true" : ""       
+      content = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(:type => "hidden", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")      
     end
     
-    # standard open and close tags
+    # Standard open and close tags
     # EX : tag :h1, "shizam", :title => "shizam"
     # => <h1 title="shizam">shizam</h1>
     def tag(name, content, options={})
@@ -110,7 +126,7 @@ module Sinatra
         (content.nil? ? '>' : ">#{content}</#{name}>")
     end
     
-    # standard single closing tags
+    # Standard single closing tags
     # single_tag :img, :src => "images/google.jpg"
     # => <img src="images/google.jpg" />
     def single_tag(name, options={})
@@ -125,6 +141,14 @@ module Sinatra
       text.to_s.gsub(/_+/, ' ').gsub(/\b('?[a-z])/) { $1.capitalize }
     end
 
+    def param_or_default(obj, field, default)
+      if field
+        params[obj] ? params[obj][field.to_s] || default : default
+      else
+        params[obj] || default
+      end
+    end
+
     def hash_to_html_attrs(options={})
       html_attrs = ""
       options.keys.sort.each do |key|
@@ -132,6 +156,18 @@ module Sinatra
       end
       html_attrs.chop
     end
+
+    class NestTag
+      def initialize(parent, name)
+        @parent = parent
+        @name   = name.to_s.gsub(/\W+/,'')
+      end
+
+      def method_missing(meth, *args)
+        @parent.send(meth, @name, *args)
+      end
+    end
+    
     
   end
 

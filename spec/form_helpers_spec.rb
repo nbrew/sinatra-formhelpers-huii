@@ -18,20 +18,54 @@ require File.expand_path 'spec_helper', File.dirname(__FILE__)
 #   end
 # end
 
-describe "Sinatra::FormHelpers includes" do
+describe "Sinatra::FormHelpers methods" do
   it "renders an anchor tag" do
     fh.form(:person, :create).should == '<form action="/person" method="POST">'
+  end
+  it 'renders a form tag' do
     fh.form(:person, :update, :action => "/people/14").should ==
       '<form action="/people/14" method="POST"><input type="hidden" name="_method" value="update" />'
+  end
+  it 'renders a form tag (2)' do
+    fh.form("/people/7", :delete).should ==
+      '<form action="/people/7" method="POST"><input type="hidden" name="_method" value="delete" />'
+  end
+  it 'renders a form tag (3)' do
+    fh.form("/people", :create).should ==
+      '<form action="/people" method="POST">'
+  end
+  it 'renders a nested form tag' do
+    fh.form(:person, :create) do |f|
+      f.text(:first_name)
+      f.text(:last_name)
+    end.should == '<form action="/person" method="POST"><input id="person_last_name" name="person[last_name]" type="text" value="" />'
+  end
+  it 'nests form elements arbitrarily' do
+    fh.nest(:person) do |n|
+      n.radio(:partners, 1..6)
+      n.textarea(:comments, "yo yo yo!")
+    end.should == '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea>'
+  end
+  it 'renders a link tag' do
     fh.link('http://google.com').should == '<a href="http://google.com">http://google.com</a>'
+  end
+  it 'renders a form label tag' do
     fh.label(:person, :first_name).should == '<label for="person_first_name">First Name</label>'
+  end
+  it 'renders a form checkbox tag' do
     fh.checkbox(:person, :gender, %w[M F], :join => '<br />').should ==
       '<input id="person_gender_m" name="person[gender]" type="checkbox" value="M" /><br />' +
       '<input id="person_gender_f" name="person[gender]" type="checkbox" value="F" />'
   end
+  it 'renders a minimal text tag' do
+    fh.text(:q).should == %q(<input id="q" name="q" type="text" value="" />)
+  end
+  it 'renders a minimal textarea tag' do
+    fh.textarea(:r).should == %q(<textarea id="r" name="r"></textarea>)
+  end
 end
 
-describe "Sinatra::FormHelpers" do
+describe "Sinatra::FormHelpers in app" do
   it 'renders an anchor tag' do
     app.get '/link' do
       erb "<%= link 'google', 'http://www.google.com', :title => 'Google' %>"
@@ -126,11 +160,11 @@ describe "Sinatra::FormHelpers" do
   end
   
   it 'renders an input tag with a submit type with single arg' do
-    app.get '/' do
+    app.get '/create' do
       erb "<%= submit 'Create' %>"
     end
     
-    get '/'
+    get '/create'
     last_response.body.should == '<input type="submit" value="Create" />'
   end
   

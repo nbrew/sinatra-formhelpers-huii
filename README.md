@@ -2,29 +2,39 @@ Sinatra::FormHelpers - Lightweight form helpers for Sinatra
 ===========================================================
 
 This plugin adds lightweight (3-5 lines each) form helpers to Sinatra that aid with
-common form and HTML tasks.
+common form and HTML tags.
 
-  link "google", "http://www.google.com"  # <a href="http://www.google.com">google</a>
-  label :person, :first_name              # <label for="person_first_name">First Name</label>
-  text :person, :first_name               # <input name="person[first_name]" id="person_first_name" type="text" />
+    link "google", "http://www.google.com"  # <a href="http://www.google.com">google</a>
+    label :person, :first_name              # <label for="person_first_name">First Name</label>
+    text :person, :first_name               # <input name="person[first_name]" id="person_first_name" type="text" />
 
 There are also helpers for: form, textarea, submit, image, radio, checkbox, and select
 
-To install it, run:
+Usage
+-----
+With Bundler/Isolate:
 
-  gem install sinatra-formhelpers
+    gem 'sinatra-formhelpers', '~>0.6.0'
 
-To include it in a Sinatra application:
+Then, include it in a Sinatra application:
 
-  require 'sinatra/form_helpers'
+    require 'sinatra/form_helpers'
       
-If you're subclassing <code>Sinatra::Base</code>, then you need to call the <code>helpers</code> manually:
+If you're subclassing <code>Sinatra::Base</code>, you also need to call <code>helpers</code> manually:
 
   class MyApp < Sinatra::Base
     helpers Sinatra::FormHelpers
     # ...
   end
-        
+
+Views
+-----
+In your views, use these helpers to dynamically create form and HTML elements.  Here's an example in ERB:
+
+    <p>Fill out the below form and click "Submit".</p>
+
+    <%= form('/users', :create) %>
+
               
 Author
 ------

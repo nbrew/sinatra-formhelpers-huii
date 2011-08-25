@@ -9,6 +9,9 @@ require 'sinatra/form_helpers'
 
 class TestFormHelpers
   include Sinatra::FormHelpers
+  def params
+    {}
+  end
 end
 def fh
   TestFormHelpers.new
