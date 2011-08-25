@@ -36,24 +36,24 @@ describe "Sinatra::FormHelpers methods" do
   end
   it 'renders a nested form tag' do
     fh.form(:person, :create) do |f|
-      f.input(:first_name)
+      # f.input(:first_name)
       f.input(:last_name)
     end.should == '<form action="/person" method="POST"><fieldset>' + 
-      '<input id="person_first_name" name="person[first_name]" type="text" value="" />' +
-      '<input id="person_last_name" name="person[last_name]" type="text" value="" />' +
+      # '<input id="person_first_name" name="person[first_name]" type="text" />' +
+      '<input id="person_last_name" name="person[last_name]" type="text" />' +
       '</fieldset></form>'
   end
   it 'nests form elements arbitrarily' do
     fh.fieldset(:person) do |n|
-      n.radio(:partners, 1..6)
+      # n.radio(:partners, 1..6)
       n.textarea(:comments, "yo yo yo!")
-    end.should == 
-      '<fieldset><input id="person_partners_1" name="person[partners]" type="radio" value="1" /> ' +
-      '<input id="person_partners_2" name="person[partners]" type="radio" value="2" /> ' +
-      '<input id="person_partners_3" name="person[partners]" type="radio" value="3" /> ' +
-      '<input id="person_partners_4" name="person[partners]" type="radio" value="4" /> ' +
-      '<input id="person_partners_5" name="person[partners]" type="radio" value="5" /> ' +
-      '<input id="person_partners_6" name="person[partners]" type="radio" value="6" />' +
+    end.should == '<fieldset>' +
+      # '<input id="person_partners_1" name="person[partners]" type="radio" value="1" /> ' +
+      # '<input id="person_partners_2" name="person[partners]" type="radio" value="2" /> ' +
+      # '<input id="person_partners_3" name="person[partners]" type="radio" value="3" /> ' +
+      # '<input id="person_partners_4" name="person[partners]" type="radio" value="4" /> ' +
+      # '<input id="person_partners_5" name="person[partners]" type="radio" value="5" /> ' +
+      # '<input id="person_partners_6" name="person[partners]" type="radio" value="6" />' +
       '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea></fieldset>'
   end
   it 'renders a link tag' do
@@ -64,11 +64,11 @@ describe "Sinatra::FormHelpers methods" do
   end
   it 'renders a form checkbox tag' do
     fh.checkbox(:person, :gender, %w[M F], :join => '<br />').should ==
-      '<input id="person_gender_m" name="person[gender]" type="checkbox" value="M" /><br />' +
-      '<input id="person_gender_f" name="person[gender]" type="checkbox" value="F" />'
+      '<input id="person_gender_m" name="person[gender][]" type="checkbox" value="M" /><label for="person_gender_m">M</label><br />' +
+      '<input id="person_gender_f" name="person[gender][]" type="checkbox" value="F" /><label for="person_gender_f">F</label>'
   end
   it 'renders a minimal text tag' do
-    fh.input(:q).should == %q(<input id="q" name="q" type="text" value="" />)
+    fh.input(:q).should == %q(<input id="q" name="q" type="text" />)
   end
   it 'renders a minimal textarea tag' do
     fh.textarea(:r).should == %q(<textarea id="r" name="r"></textarea>)
@@ -83,7 +83,8 @@ describe "Sinatra::FormHelpers methods" do
   end
   it 'supports multiple values for checkboxes' do
     fh.params = {:user => {'devices' => ['iPhone', 'iPad'] }}
-    fh.checkbox(:user, :devices, ['iPhone', 'iPad', 'iPod', 'iPoop']).should == ' = BLARK ='
+    fh.checkbox(:user, :devices, ['iPhone', 'iPad', 'iPod', 'iPoop']).should == 
+      "<input checked=\"checked\" id=\"user_devices_iphone\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPhone\" /><label for=\"user_devices_iphone\">iPhone</label> <input checked=\"checked\" id=\"user_devices_ipad\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPad\" /><label for=\"user_devices_ipad\">iPad</label> <input id=\"user_devices_ipod\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPod\" /><label for=\"user_devices_ipod\">iPod</label> <input id=\"user_devices_ipoop\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPoop\" /><label for=\"user_devices_ipoop\">iPoop</label>"
   end
 end
 
@@ -122,7 +123,7 @@ describe "Sinatra::FormHelpers in app" do
 
     get '/text'
     last_response.body.should =~ /name="person\[first_name\]"/
-    last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" value="" />)
+    last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" />)
   end
 
   it 'renders an input tag type text with single arg' do
@@ -131,7 +132,7 @@ describe "Sinatra::FormHelpers in app" do
     end
   
     get '/q'
-    last_response.body.should == %q(<input id="q" name="q" type="text" value="" />)
+    last_response.body.should == %q(<input id="q" name="q" type="text" />)
   end
   
   it 'renders an input tag type text with @params' do
@@ -192,26 +193,36 @@ describe "Sinatra::FormHelpers in app" do
   
   it 'renders an input tag with a checkbox type' do
     app.get '/check' do
-      erb "<%= checkbox :person, :active, [1,2,3] %>"
+      erb "<%= checkbox :person, :active, 'Yes' %>"
     end
     
     get '/check'
     last_response.body.should ==
-      '<input id="person_active_1" name="person[active]" type="checkbox" value="1" /> ' +
-      '<input id="person_active_2" name="person[active]" type="checkbox" value="2" /> ' +
-      '<input id="person_active_3" name="person[active]" type="checkbox" value="3" />'
+      '<input id="person_active_yes" name="person[active]" type="checkbox" value="Yes" /><label for="person_active_yes">Yes</label>'
+  end
+
+  it 'renders an input tag with a multiple checkbox type' do
+    app.get '/check2' do
+      erb "<%= checkbox :person, :eyes, [1,2,3] %>"
+    end
+
+    get '/check2'
+    last_response.body.should ==
+      '<input id="person_eyes_1" name="person[eyes][]" type="checkbox" value="1" /><label for="person_eyes_1">1</label> ' +
+      '<input id="person_eyes_2" name="person[eyes][]" type="checkbox" value="2" /><label for="person_eyes_2">2</label> ' +
+      '<input id="person_eyes_3" name="person[eyes][]" type="checkbox" value="3" /><label for="person_eyes_3">3</label>'
   end
 
   it 'renders an input tag with a radio type' do
     app.get '/radio' do
-      erb "<%= radio :person, :gender, ['Male','Female','Other'] %>"
+      erb "<%= radio :person, :gender, [['M','Male'],['F','Female'],'Other'] %>"
     end
-    
+
     get '/radio'
     last_response.body.should ==
-      '<input id="person_gender_male" name="person[gender]" type="radio" value="Male" /> ' +
-      '<input id="person_gender_female" name="person[gender]" type="radio" value="Female" /> ' +  
-      '<input id="person_gender_other" name="person[gender]" type="radio" value="Other" />'
+      "<input id=\"person_gender_m\" name=\"person[gender]\" type=\"radio\" value=\"M\" /><label for=\"person_gender_m\">Male</label> " +
+      "<input id=\"person_gender_f\" name=\"person[gender]\" type=\"radio\" value=\"F\" /><label for=\"person_gender_f\">Female</label> " +
+      "<input id=\"person_gender_other\" name=\"person[gender]\" type=\"radio\" value=\"Other\" /><label for=\"person_gender_other\">Other</label>"
   end
   
   it 'renders a select tag' do

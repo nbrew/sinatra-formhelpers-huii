@@ -94,11 +94,13 @@ module Sinatra
       join = options.delete(:join) || ' '
       labs = options.delete(:label)
       vals = param_or_default(obj, field, [])
+      ary = values.is_a?(Array) && values.length > 1 ? '[]' : ''
       Array(values).collect do |val|
-        single_tag(:input, options.merge(:type => "checkbox", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
-                                         :name => "#{obj}[#{field}]", :value => val,
+        id, text = id_and_text_from_value(val)
+        single_tag(:input, options.merge(:type => "checkbox", :id => "#{obj}_#{field}_#{id.to_s.downcase}",
+                                         :name => "#{obj}[#{field}]#{ary}", :value => id,
                                          :checked => vals.include?(val) ? 'checked' : nil)) +
-        (labs.nil? || labs == true ? label(obj, "#{field}_#{val.to_s.downcase}", val) : '')
+        (labs.nil? || labs == true ? label(obj, "#{field}_#{id.to_s.downcase}", text) : '')
       end.join(join)
     end
     
@@ -110,10 +112,11 @@ module Sinatra
       labs = options.delete(:label)
       vals = param_or_default(obj, field, [])
       Array(values).collect do |val|
-        single_tag(:input, options.merge(:type => "radio", :id => "#{obj}_#{field}_#{val.to_s.downcase}",
-                                         :name => "#{obj}[#{field}]", :value => val,
+        id, text = id_and_text_from_value(val)
+        single_tag(:input, options.merge(:type => "radio", :id => "#{obj}_#{field}_#{id.to_s.downcase}",
+                                         :name => "#{obj}[#{field}]", :value => id,
                                          :checked => vals.include?(val) ? 'checked' : nil)) +
-        (labs.nil? || labs == true ? label(obj, "#{field}_#{val.to_s.downcase}", val) : '')
+        (labs.nil? || labs == true ? label(obj, "#{field}_#{id.to_s.downcase}", text) : '')
       end.join(join)
     end
 
@@ -121,10 +124,11 @@ module Sinatra
     def select(obj, field, values, options={})
       content = ""
       Array(values).each do |val|
+        id, text = id_and_text_from_value(val)
         if val.is_a? Array
-          content << tag(:option, val.last, :value => val.first)
+          content << tag(:option, text, :value => id)
         else
-          content << tag(:option, val, :value => val)
+          content << tag(:option, text, :value => id)
         end
       end
       tag :select, content, options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
@@ -175,6 +179,14 @@ module Sinatra
         html_attrs << %Q(#{key}="#{fast_escape_html(options[key])}" )
       end
       html_attrs.chop
+    end
+
+    def id_and_text_from_value(val)
+      if val.is_a? Array
+        [val.first, val.last]
+      else
+        [val, val]
+      end
     end
 
     class Fieldset
