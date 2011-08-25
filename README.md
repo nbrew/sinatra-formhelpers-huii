@@ -22,26 +22,56 @@ Then, include it in a Sinatra application:
       
 If you're subclassing <code>Sinatra::Base</code>, you also need to call <code>helpers</code> manually:
 
-  class MyApp < Sinatra::Base
-    helpers Sinatra::FormHelpers
-    # ...
-  end
+    class MyApp < Sinatra::Base
+      helpers Sinatra::FormHelpers
+      # ...
+    end
 
 Views
 -----
 In your views, use these helpers to dynamically create form and HTML elements.  Here's an example in ERB:
 
-    <p>Fill out the below form to sign up.</p>
+    <p>
+      Fill out the below form to sign up.
+      For more information, visit our <%= link 'FAQ', '/faq' %>
+    </p>
 
     <%= form('/users', :create) %>
     
     <%= text(:user, :first_name) %>
     <%= text(:user, :last_name) %>
-    <%= text(:user, :gender, ['M', 'F']) %>
 
-    <%= textarea(:user, :signature) %>
+    <%= text(:user, :email, :size => 40) %>
 
-    <%= submit >
+    <%= password(:user, :password) %>
+    <%= password(:user, :confirm_password) %>
+
+    <%= radio(:user, :gender, ['M', 'F']) %>
+
+    <%= submit %>
+
+These helpers also support Rails <code>form_for</code> like functionality, but *without* *super* *magic*:
+
+    <%= form(:user, :create, :action => '/users') do |f| %>
+
+    <%= text(:user, :first_name) %>
+    <%= text(:user, :last_name) %>
+
+    <%= text(:user, :email, :size => 40) %>
+
+    <%= password(:user, :password) %>
+    <%= password(:user, :confirm_password) %>
+
+    <%= radio(:user, :gender, ['M', 'F']) %>
+
+    <%= submit %>
+
+
+
+
+    
+
+
               
 Author
 ------

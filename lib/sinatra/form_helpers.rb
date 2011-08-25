@@ -26,14 +26,15 @@ module Sinatra
       action = "/#{action}" if action.is_a? Symbol
         
       out = tag(:form, nil, {:action => action, :method => method.to_s.upcase}.merge(options)) + method_input
-      out << nest(action, &block) + '</form>' if block_given?
+      out << fieldset(action, &block) + '</form>' if block_given?
       out
     end
 
-    def nest(obj, &block)
-      yield(NestTag.new(self, obj))
+    def fieldset(obj, legend=nil, &block)
+      o = yield Fieldset.new(self, obj)
+      '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + o + '</fieldset>'
     end
-
+    
     # Link to a URL
     def link(content, href=content, options={})
       tag :a, content, options.merge(:href => href)  
@@ -54,6 +55,16 @@ module Sinatra
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
         :type => "text", :id => field.nil? ? obj : "#{obj}_#{field}",
+        :name => field.nil? ? obj : "#{obj}[#{field}]",
+        :value => value
+      )
+    end
+
+    # Form password input.  Specify the value as :value => 'foo'
+    def password(obj, field=nil, options={})
+      value = param_or_default(obj, field, options[:value])
+      single_tag :input, options.merge(
+        :type => "password", :id => field.nil? ? obj : "#{obj}_#{field}",
         :name => field.nil? ? obj : "#{obj}[#{field}]",
         :value => value
       )
@@ -133,7 +144,7 @@ module Sinatra
       "<#{name.to_s} #{hash_to_html_attrs(options)} />"
     end
     
-    def minimal_escape_html(text)
+    def fast_escape_html(text)
       text.to_s.gsub(/\&/,'&amp;').gsub(/\"/,'&quot;').gsub(/>/,'&gt;').gsub(/</,'&lt;')
     end
     
@@ -152,19 +163,20 @@ module Sinatra
     def hash_to_html_attrs(options={})
       html_attrs = ""
       options.keys.sort.each do |key|
-        html_attrs << %Q(#{key}="#{minimal_escape_html(options[key])}" )
+        html_attrs << %Q(#{key}="#{fast_escape_html(options[key])}" )
       end
       html_attrs.chop
     end
 
-    class NestTag
+    class Fieldset
       def initialize(parent, name)
         @parent = parent
         @name   = name.to_s.gsub(/\W+/,'')
+        @outbuf = ''
       end
 
       def method_missing(meth, *args)
-        @parent.send(meth, @name, *args)
+        @outbuf << @parent.send(meth, @name, *args)
       end
     end
     

@@ -38,16 +38,23 @@ describe "Sinatra::FormHelpers methods" do
     fh.form(:person, :create) do |f|
       f.text(:first_name)
       f.text(:last_name)
-    end.should == '<form action="/person" method="POST">' + 
-      '<input id="person_first_name" name="person[last_name]" type="text" value="" />'
+    end.should == '<form action="/person" method="POST"><fieldset>' + 
+      '<input id="person_first_name" name="person[first_name]" type="text" value="" />' +
       '<input id="person_last_name" name="person[last_name]" type="text" value="" />' +
-      '</form>'
+      '</fieldset></form>'
   end
   it 'nests form elements arbitrarily' do
-    fh.nest(:person) do |n|
+    fh.fieldset(:person) do |n|
       n.radio(:partners, 1..6)
       n.textarea(:comments, "yo yo yo!")
-    end.should == '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea>'
+    end.should == 
+      '<fieldset><input id="person_partners_1" name="person[partners]" type="radio" value="1" /> ' +
+      '<input id="person_partners_2" name="person[partners]" type="radio" value="2" /> ' +
+      '<input id="person_partners_3" name="person[partners]" type="radio" value="3" /> ' +
+      '<input id="person_partners_4" name="person[partners]" type="radio" value="4" /> ' +
+      '<input id="person_partners_5" name="person[partners]" type="radio" value="5" /> ' +
+      '<input id="person_partners_6" name="person[partners]" type="radio" value="6" />' +
+      '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea></fieldset>'
   end
   it 'renders a link tag' do
     fh.link('http://google.com').should == '<a href="http://google.com">http://google.com</a>'
@@ -203,7 +210,7 @@ describe "Sinatra::FormHelpers in app" do
       '<input id="person_gender_other" name="person[gender]" type="radio" value="Other" />'
   end
   
-  it 'renders an select tag' do
+  it 'renders a select tag' do
     app.get '/select' do
       erb "<%= select :person, :relationship, ['Friend','CoWorker','Lead'] %>"
     end
@@ -222,5 +229,30 @@ describe "Sinatra::FormHelpers in app" do
     get '/hidden'
     last_response.body.should == '<input id="person_id" name="person[id]" type="hidden" value="1" />'
   end
+  
+  it 'renders a form tag' do
+    app.get '/form' do
+      erb "<%= form :person, :create %>"
+    end
+      
+    get '/form'
+    last_response.body.should == %q(<form action="/person" method="POST">)
+  end
+
+  it 'renders a form_for style tag' do
+    app.get '/form_for' do
+      erb <<-EndTemplate
+<%= form(:person, :create) do |f| %>
+  <%= f.text(:login) %>
+  <%= f.password(:password) %>
+  <%= submit %>
+<% end %>
+EndTemplate
+    end
+      
+    get '/form_for'
+    last_response.body.should == %q(<form action="/person" method="POST">)
+  end
+  
 end
 
