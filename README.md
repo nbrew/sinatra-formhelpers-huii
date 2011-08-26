@@ -14,9 +14,9 @@ Why Bother?
 -----------
 After all, you can just write Haml or write your own helpers or hand-code raw HTML or whatever.  Well, here's some considerations:
 
-1. Helpers correct state across form submissions (eg, on errors, form stays filled in)
-2. Automatic labels, valid CSS ID's, <code>nested[names]</code> to make ORMs happy
-3. No ultra-magic here. Fast, simple code.
+1. Helpers maintain correct state across form submissions (eg, on errors, form stays filled in)
+2. Generate automatic labels, valid CSS ID's, and <code>nested[names]</code> to make ORMs happy
+3. No Rails ultra-magic(tm) here. Just fast, simple code.
 
 Usage
 -----
@@ -58,9 +58,9 @@ In your views, use these helpers to dynamically create form HTML elements.  Here
 
     <%= submit %>
 
-Note that unlike the super-magic Rails <code>form_for</code> method, the <code>form()</code> helper just takes a URL and method.
+Unlike the super-magic Rails <code>form\_for</code> method, the <code>form()</code> helper just takes a URL and method. (Note that <code>form()</code> will accept <code>:create</code>, <code>:update</code>, and <code>:delete</code> and include the special <code>\_method</code> hidden param for you.)
 
-To reduce repetition, you can also use <code>fieldset()</code> to prefix fields with a namespace:
+To reduce repetition, use <code>fieldset()</code> to prefix fields with a namespace:
 
     <%= form('/users', :create) %>
 
@@ -76,7 +76,8 @@ To reduce repetition, you can also use <code>fieldset()</code> to prefix fields 
       <%= f.radio(:gender, ['M', 'F']) %>
     <% end %>
 
-    <%= submit %>
+    <%= submit 'Create account' %>
+    <%= submit 'Cancel', :onclick => 'window.location=http://mydomain.com;return false' %>
 
 This will create fields named <code>user[first\_name]</code>, <code>user[last\_name]<code>, and so forth.
 
