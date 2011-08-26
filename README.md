@@ -10,6 +10,14 @@ common form and HTML tags.
 
 There are also helpers for: form, textarea, submit, image, radio, checkbox, and select
 
+Why Bother?
+-----------
+After all, you can just write Haml or write your own helpers or hand-code raw HTML or whatever.  Well, here's some considerations:
+
+1. Helpers correct state across form submissions (eg, on errors, form stays filled in)
+2. Automatic labels, valid CSS ID's, <code>nested[names]</code> to make ORMs happy
+3. No ultra-magic here. Fast, simple code.
+
 Usage
 -----
 With Bundler/Isolate:
@@ -29,14 +37,14 @@ If you're subclassing <code>Sinatra::Base</code>, you also need to call <code>he
 
 Views
 -----
-In your views, use these helpers to dynamically create form and HTML elements.  Here's an example in ERB:
+In your views, use these helpers to dynamically create form HTML elements.  Here's an example in ERB:
 
     <p>
       Fill out the below form to sign up.
       For more information, visit our <%= link 'FAQ', '/faq' %>
     </p>
 
-    <%= form('/users', :create) %>
+    <%= form('/users', :post) %>
     
     <%= input(:user, :first_name) %>
     <%= input(:user, :last_name) %>
@@ -50,9 +58,9 @@ In your views, use these helpers to dynamically create form and HTML elements.  
 
     <%= submit %>
 
-Note that unlike the super-magic Rails <code>form_for</code> method, this <code>form()</code> helper takes a URL.
+Note that unlike the super-magic Rails <code>form_for</code> method, the <code>form()</code> helper just takes a URL and method.
 
-To reduce repetition, you can also use fieldset() to prefix fields with a namespace:
+To reduce repetition, you can also use <code>fieldset()</code> to prefix fields with a namespace:
 
     <%= form('/users', :create) %>
 
@@ -70,7 +78,12 @@ To reduce repetition, you can also use fieldset() to prefix fields with a namesp
 
     <%= submit %>
 
-This will create fields named "user[first\_name]", "user[last\_name]", and so forth.
+This will create fields named <code>user[first\_name]</code>, <code>user[last\_name]<code>, and so forth.
+
+Known Bugs
+----------
+* Currently <code>fieldset</code> does not return a <fieldset> tag properly (working on it)
+
 
 Author
 ------
