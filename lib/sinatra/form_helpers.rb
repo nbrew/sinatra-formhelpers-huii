@@ -54,7 +54,7 @@ module Sinatra
     def input(obj, field=nil, options={})
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
-        :type => "text", :id => field.nil? ? obj : "#{obj}_#{field}",
+        :type => "text", :id => css_id(obj, field),
         :name => field.nil? ? obj : "#{obj}[#{field}]",
         :value => value
       )
@@ -64,7 +64,7 @@ module Sinatra
     def password(obj, field=nil, options={})
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
-        :type => "password", :id => field.nil? ? obj : "#{obj}_#{field}",
+        :type => "password", :id => css_id(obj, field),
         :name => field.nil? ? obj : "#{obj}[#{field}]",
         :value => value
       )
@@ -74,19 +74,27 @@ module Sinatra
     def textarea(obj, field=nil, content='', options={})
       content = param_or_default(obj, field, content)
       tag :textarea, content, options.merge(
-        :id   => field.nil? ? obj : "#{obj}_#{field}",
+        :id   => css_id(obj, field),
         :name => field.nil? ? obj : "#{obj}[#{field}]"
       )
     end
 
     # Form submit tag.
     def submit(value='Submit', options={})
-      single_tag :input, {:name => "submit", :type => "submit", :value => value}.merge(options)
+      single_tag :input, {:name => "submit", :type => "submit",
+                          :value => value, :id => css_id('button', value)}.merge(options)
     end
 
     # Form reset tag.  Does anyone use these anymore?
     def reset(value='Reset', options={})
-      single_tag :input, {:name => "reset", :type => "reset", :value => value}.merge(options)
+      single_tag :input, {:name => "reset", :type => "reset",
+                          :value => value, :id => css_id('button', value)}.merge(options)
+    end
+
+    # General purpose button, usually these need JavaScript hooks.
+    def button(value, options={})
+      single_tag :input, {:name => "button", :type => "button",
+                          :value => value, :id => css_id('button', value)}.merge(options)
     end
 
     # Form checkbox.  Specify an array of values to get a checkbox group.
@@ -97,7 +105,7 @@ module Sinatra
       ary = values.is_a?(Array) && values.length > 1 ? '[]' : ''
       Array(values).collect do |val|
         id, text = id_and_text_from_value(val)
-        single_tag(:input, options.merge(:type => "checkbox", :id => "#{obj}_#{field}_#{id.to_s.downcase}",
+        single_tag(:input, options.merge(:type => "checkbox", :id => css_id(obj, field, id),
                                          :name => "#{obj}[#{field}]#{ary}", :value => id,
                                          :checked => vals.include?(val) ? 'checked' : nil)) +
         (labs.nil? || labs == true ? label(obj, "#{field}_#{id.to_s.downcase}", text) : '')
@@ -113,7 +121,7 @@ module Sinatra
       vals = param_or_default(obj, field, [])
       Array(values).collect do |val|
         id, text = id_and_text_from_value(val)
-        single_tag(:input, options.merge(:type => "radio", :id => "#{obj}_#{field}_#{id.to_s.downcase}",
+        single_tag(:input, options.merge(:type => "radio", :id => css_id(obj, field, id),
                                          :name => "#{obj}[#{field}]", :value => id,
                                          :checked => vals.include?(val) ? 'checked' : nil)) +
         (labs.nil? || labs == true ? label(obj, "#{field}_#{id.to_s.downcase}", text) : '')
@@ -131,13 +139,13 @@ module Sinatra
           content << tag(:option, text, :value => id)
         end
       end
-      tag :select, content, options.merge(:id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")
+      tag :select, content, options.merge(:id => css_id(obj, field), :name => "#{obj}[#{field}]")
     end
     
     # Form hidden input.  Specify value as :value => 'foo'
     def hidden(obj, field="", options={})
       content = param_or_default(obj, field, options[:value])
-      single_tag :input, options.merge(:type => "hidden", :id => "#{obj}_#{field}", :name => "#{obj}[#{field}]")      
+      single_tag :input, options.merge(:type => "hidden", :id => css_id(obj, field), :name => "#{obj}[#{field}]")      
     end
     
     # Standard open and close tags
@@ -187,6 +195,10 @@ module Sinatra
       else
         [val, val]
       end
+    end
+    
+    def css_id(*things)
+      things.compact.map{|t| t.to_s}.join('_').downcase.gsub(/\W/,'_')
     end
 
     class Fieldset

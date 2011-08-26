@@ -74,12 +74,12 @@ describe "Sinatra::FormHelpers methods" do
     fh.textarea(:r).should == %q(<textarea id="r" name="r"></textarea>)
   end
   it 'renders a submit tag' do
-    fh.submit.should == %q(<input name="submit" type="submit" value="Submit" />)
-    fh.submit("Send!").should == %q(<input name="submit" type="submit" value="Send!" />)
+    fh.submit.should == %q(<input id="button_submit" name="submit" type="submit" value="Submit" />)
+    fh.submit("Send!").should == %q(<input id="button_send_" name="submit" type="submit" value="Send!" />)
   end
   it 'renders a reset tag' do
-    fh.reset.should == %q(<input name="reset" type="reset" value="Reset" />)
-    fh.reset("Blark").should == %q(<input name="reset" type="reset" value="Blark" />)
+    fh.reset.should == %q(<input id="button_reset" name="reset" type="reset" value="Reset" />)
+    fh.reset("Blark").should == %q(<input id="button_blark" name="reset" type="reset" value="Blark" />)
   end
   it 'supports multiple values for checkboxes' do
     fh.params = {:user => {'devices' => ['iPhone', 'iPad'] }}
@@ -179,16 +179,16 @@ describe "Sinatra::FormHelpers in app" do
     end
     
     get '/sub'
-    last_response.body.should == '<input name="submit" type="submit" value="Create" />'
+    last_response.body.should == '<input id="button_create" name="submit" type="submit" value="Create" />'
   end
   
-  it 'renders an input tag with a submit type with single arg' do
+  it 'renders an input tag with a submit type with zero args' do
     app.get '/create' do
-      erb "<%= submit 'Create' %>"
+      erb "<%= submit %>"
     end
     
     get '/create'
-    last_response.body.should == '<input name="submit" type="submit" value="Create" />'
+    last_response.body.should == '<input id="button_submit" name="submit" type="submit" value="Submit" />'
   end
   
   it 'renders an input tag with a checkbox type' do
@@ -288,8 +288,8 @@ EndTemplate
 end
 
     get '/fieldset'
-    last_response.body.should == %Q(  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" />\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" />\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" /><input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" value=\"\" />\n\n  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" value=\"\" /><input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" value=\"\" /><input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" value=\"\" /><input id=\"user_password\" name=\"user[password]\" type=\"password\" value=\"\" /><input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" value=\"\" /><input id=\"user_gender_m\" name=\"user[gender]\" type=\"radio\" value=\"M\" /> <input id=\"user_gender_f\" name=\"user[gender]\" type=\"radio\" value=\"F\" />\n<input name=\"submit\" type=\"submit\" value=\"Submit\" />)
+    last_response.body.should ==
+      "  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" />\n  <input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" />\n\n  <input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" />\n\n  <input id=\"user_password\" name=\"user[password]\" type=\"password\" />\n  <input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" />\n\n  <input id=\"user_gender_m\" name=\"user[gender]\" type=\"radio\" value=\"M\" /><label for=\"user_gender_m\">M</label> <input id=\"user_gender_f\" name=\"user[gender]\" type=\"radio\" value=\"F\" /><label for=\"user_gender_f\">F</label>\n<input id=\"button_submit\" name=\"submit\" type=\"submit\" value=\"Submit\" />"
   end
-
 end
 
