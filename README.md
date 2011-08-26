@@ -27,7 +27,7 @@ With Bundler/Isolate:
 Then, include it in a Sinatra application:
 
     require 'sinatra/form_helpers'
-      
+
 If you're subclassing <code>Sinatra::Base</code>, you also need to call <code>helpers</code> manually:
 
     class MyApp < Sinatra::Base
