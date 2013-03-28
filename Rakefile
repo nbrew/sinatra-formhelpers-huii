@@ -13,7 +13,7 @@ begin
     gem.description = %Q{Simple, lightweight form helpers for Sinatra. Based on initial efforts by twilson63.}
     gem.email = "nate@wiger.org"
     gem.homepage = "http://github.com/nateware/sinatra-formhelpers"
-    gem.authors = ["Nate Wiger"]
+    gem.authors = ["Nate Wiger", "Cymen Vig"]
     gem.add_development_dependency "bacon", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
