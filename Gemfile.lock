@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bacon (1.2.0)
+    rack (1.5.2)
+    rack-test (0.6.2)
+      rack (>= 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bacon
+  rack-test

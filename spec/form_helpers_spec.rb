@@ -224,7 +224,7 @@ describe "Sinatra::FormHelpers in app" do
       "<input id=\"person_gender_f\" name=\"person[gender]\" type=\"radio\" value=\"F\" /><label for=\"person_gender_f\">Female</label> " +
       "<input id=\"person_gender_other\" name=\"person[gender]\" type=\"radio\" value=\"Other\" /><label for=\"person_gender_other\">Other</label>"
   end
-  
+
   it 'renders a select tag' do
     app.get '/select' do
       erb "<%= select :person, :relationship, ['Friend','CoWorker','Lead'] %>"
@@ -233,6 +233,18 @@ describe "Sinatra::FormHelpers in app" do
     get '/select'
     last_response.body.should == '<select id="person_relationship" name="person[relationship]">' +
       '<option value="Friend">Friend</option><option value="CoWorker">CoWorker</option>' + 
+      '<option value="Lead">Lead</option></select>'
+  end
+  
+  it 'renders a select tag with selected option' do
+    app.get '/select2' do
+      @params = { :person => {"relationship" => "CoWorker"}}
+      erb "<%= select :person, :relationship, ['Friend','CoWorker','Lead'] %>"
+    end
+    
+    get '/select2'
+    last_response.body.should == '<select id="person_relationship" name="person[relationship]">' +
+      '<option value="Friend">Friend</option><option selected="selected" value="CoWorker">CoWorker</option>' + 
       '<option value="Lead">Lead</option></select>'
   end
   

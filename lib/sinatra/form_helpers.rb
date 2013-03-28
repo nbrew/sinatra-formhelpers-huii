@@ -130,14 +130,13 @@ module Sinatra
 
     # Form select dropdown.  Currently only single-select (not multi-select) is supported.
     def select(obj, field, values, options={})
+      value = param_or_default(obj, field, options[:value])
       content = ""
       Array(values).each do |val|
         id, text = id_and_text_from_value(val)
-        if val.is_a? Array
-          content << tag(:option, text, :value => id)
-        else
-          content << tag(:option, text, :value => id)
-        end
+        tag_options = { :value => id }
+        tag_options[:selected] = 'selected' if id == value
+        content << tag(:option, text, tag_options)
       end
       tag :select, content, options.merge(:id => css_id(obj, field), :name => "#{obj}[#{field}]")
     end
@@ -183,7 +182,7 @@ module Sinatra
     def hash_to_html_attrs(options={})
       html_attrs = ""
       options.keys.sort.each do |key|
-        next if options[key].nil?  # do not include empty attributes
+        next if options[key].nil? # do not include empty attributes
         html_attrs << %Q(#{key}="#{fast_escape_html(options[key])}" )
       end
       html_attrs.chop
