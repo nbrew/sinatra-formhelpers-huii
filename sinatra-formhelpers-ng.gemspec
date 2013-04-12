@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/sinatra/form_helpers.rb",
+    "sinatra-formhelpers-ng.gemspec",
     "sinatra-formhelpers.gemspec",
     "spec/form_helpers_spec.rb",
     "spec/spec_helper.rb"
