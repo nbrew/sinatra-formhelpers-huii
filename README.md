@@ -91,7 +91,8 @@ Fixed Bugs
 * The state of select tags was not persisted across form submissions.
 
 
-Author
+Authors
+-------
 * Initial efforts (c) 2009 twilson63.
-* Additional efforts (c) 2011 [Nate Wiger](http://nateware.com).  
+* [Additional efforts](https://github.com/nateware/sinatra-formhelpers) (c) 2011 [Nate Wiger](http://nateware.com).
 * Further efforts (c) 2013 [Cymen Vig](http://blog.cymen.org/).
