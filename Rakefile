@@ -8,12 +8,12 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "sinatra-formhelpers"
+    gem.name = "sinatra-formhelpers-ng"
     gem.summary = %Q{Form helpers for Sinatra}
-    gem.description = %Q{Simple, lightweight form helpers for Sinatra. Based on initial efforts by twilson63.}
-    gem.email = "nate@wiger.org"
-    gem.homepage = "http://github.com/nateware/sinatra-formhelpers"
-    gem.authors = ["Nate Wiger", "Cymen Vig"]
+    gem.description = %Q{Simple, lightweight form helpers for Sinatra.}
+    gem.email = "cymenvig@gmail.com"
+    gem.homepage = "http://github.com/cymen/sinatra-formhelpers"
+    gem.authors = ["twilson63", "Nate Wiger", "Cymen Vig"]
     gem.add_development_dependency "bacon", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

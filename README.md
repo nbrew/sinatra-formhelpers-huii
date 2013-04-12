@@ -87,5 +87,6 @@ Known Bugs
 
 
 Author
-------
-Copyright (c) 2011 [Nate Wiger](http://nateware.com).  Based on initial efforts (c) 2009 twilson63.
+* Initial efforts (c) 2009 twilson63.
+* Additional efforts (c) 2011 [Nate Wiger](http://nateware.com).  
+* Further efforts (c) 2013 [Cymen Vig](http://blog.cymen.org/).
