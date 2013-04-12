@@ -22,7 +22,7 @@ Usage
 -----
 With Bundler/Isolate:
 
-    gem 'sinatra-formhelpers', '~>0.6.0'
+    gem 'sinatra-formhelpers-ng'
 
 Then, include it in a Sinatra application:
 
@@ -83,7 +83,12 @@ This will create fields named <code>user[first\_name]</code>, <code>user[last\_n
 
 Known Bugs
 ----------
-* Currently <code>fieldset</code> does not return a <fieldset> tag properly (working on it)
+* Currently <code>fieldset</code> does not return a <fieldset> tag properly.
+
+
+Fixed Bugs
+----------
+* The state of select tags was not persisted across form submissions.
 
 
 Author
