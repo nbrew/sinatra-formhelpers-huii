@@ -93,6 +93,6 @@ Fixed Bugs
 
 Authors
 -------
-* Initial efforts (c) 2009 twilson63.
+* [Initial efforts](https://github.com/twilson63/sinatra-formhelpers) (c) 2009 [Tom Wilson](https://github.com/twilson63).
 * [Additional efforts](https://github.com/nateware/sinatra-formhelpers) (c) 2011 [Nate Wiger](http://nateware.com).
 * Further efforts (c) 2013 [Cymen Vig](http://blog.cymen.org/).
