@@ -126,6 +126,15 @@ describe "Sinatra::FormHelpers in app" do
     last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" />)
   end
 
+  it 'accepts an input tag with custom type option' do
+    app.get '/input-with-custom-type' do
+      erb "<%= input :person, :password, type: 'password' %>"
+    end
+
+    get '/input-with-custom-type'
+    last_response.body.should == '<input id="person_password" name="person[password]" type="password" />'
+  end
+
   it 'renders an input tag type text with single arg' do
     app.get '/q' do
       erb "<%= input :q %>"
@@ -143,6 +152,15 @@ describe "Sinatra::FormHelpers in app" do
 
     get '/tom'
     last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" value="Tom" />)
+  end
+
+  it 'renders a password tag type password' do
+    app.get '/password' do
+      erb "<%= password :person, :password %>"
+    end
+
+    get '/password'
+    last_response.body.should == '<input id="person_password" name="person[password]" type="password" />'
   end
 
   it 'renders an textarea tag type text without @params' do

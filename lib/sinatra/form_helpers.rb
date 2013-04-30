@@ -54,7 +54,8 @@ module Sinatra
     def input(obj, field=nil, options={})
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
-        :type => "text", :id => css_id(obj, field),
+        :type => options[:type] || "text",
+        :id => css_id(obj, field),
         :name => field.nil? ? obj : "#{obj}[#{field}]",
         :value => value
       )
@@ -62,12 +63,7 @@ module Sinatra
 
     # Form password input.  Specify the value as :value => 'foo'
     def password(obj, field=nil, options={})
-      value = param_or_default(obj, field, options[:value])
-      single_tag :input, options.merge(
-        :type => "password", :id => css_id(obj, field),
-        :name => field.nil? ? obj : "#{obj}[#{field}]",
-        :value => value
-      )
+      input(obj, field, options.merge(:type => 'password'))
     end
 
     # Form textarea box.
@@ -143,13 +139,7 @@ module Sinatra
 
     # Form hidden input.  Specify value as :value => 'foo'
     def hidden(obj, field = nil, options = {})
-      value = param_or_default(obj, field, options[:value])
-      single_tag :input, options.merge(
-        :type => "hidden",
-        :id => css_id(obj, field),
-        :name => field.nil? ? obj : "#{obj}[#{field}]",
-        :value => value
-      )
+      input(obj, field, options.merge(:type => 'hidden'))
     end
 
     # Standard open and close tags
