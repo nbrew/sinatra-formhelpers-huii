@@ -163,6 +163,15 @@ describe "Sinatra::FormHelpers in app" do
     last_response.body.should == '<input id="person_password" name="person[password]" type="password" />'
   end
 
+  it 'renders a button tag type button' do
+    app.get '/button' do
+      erb "<%= button :new %>"
+    end
+
+    get '/button'
+    last_response.body.should == '<input id="button_new" name="button" type="button" value="new" />'
+  end
+
   it 'renders an textarea tag type text without @params' do
     app.get '/notes' do
       erb "<%= textarea :person, :notes %>"
