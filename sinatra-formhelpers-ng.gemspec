@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
     "spec/form_helpers_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/cymen/sinatra-formhelpers"
+  s.homepage = "http://github.com/cymen/sinatra-formhelpers-ng"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.25"
   s.summary = "Form helpers for Sinatra"
