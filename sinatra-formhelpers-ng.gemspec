@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "sinatra-formhelpers-ng"
-  s.version = "1.6.0"
+  s.version = "1.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["twilson63", "Nate Wiger", "Cymen Vig"]
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
     "spec/form_helpers_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/cymen/sinatra-formhelpers-ng"
+  s.homepage = "http://github.com/cymen/sinatra-formhelpers"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.25"
   s.summary = "Form helpers for Sinatra"
