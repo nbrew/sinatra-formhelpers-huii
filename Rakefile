@@ -12,7 +12,7 @@ begin
     gem.summary = %Q{Form helpers for Sinatra}
     gem.description = %Q{Simple, lightweight form helpers for Sinatra.}
     gem.email = "cymenvig@gmail.com"
-    gem.homepage = "http://github.com/cymen/sinatra-formhelpers"
+    gem.homepage = "http://github.com/cymen/sinatra-formhelpers-ng"
     gem.authors = ["twilson63", "Nate Wiger", "Cymen Vig"]
     gem.add_development_dependency "bacon", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
