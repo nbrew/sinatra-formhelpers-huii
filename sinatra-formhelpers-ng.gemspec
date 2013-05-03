@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "sinatra-formhelpers-ng"
-  s.version = "1.5.0"
+  s.version = "1.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["twilson63", "Nate Wiger", "Cymen Vig"]
-  s.date = "2013-04-12"
+  s.date = "2013-05-03"
   s.description = "Simple, lightweight form helpers for Sinatra."
   s.email = "cymenvig@gmail.com"
   s.extra_rdoc_files = [
@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
     "VERSION",
     "lib/sinatra/form_helpers.rb",
     "sinatra-formhelpers-ng.gemspec",
-    "sinatra-formhelpers.gemspec",
     "spec/form_helpers_spec.rb",
     "spec/spec_helper.rb"
   ]
