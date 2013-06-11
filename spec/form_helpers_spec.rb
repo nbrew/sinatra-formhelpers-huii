@@ -20,7 +20,7 @@ require File.expand_path 'spec_helper', File.dirname(__FILE__)
 
 describe "Sinatra::FormHelpers methods" do
   it "renders an anchor tag" do
-    fh.form(:person, :create).should == '<form action="/person" method="POST">'
+    fh.form(:person, :create).should == '<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />'
   end
   it 'renders a form tag' do
     fh.form(:person, :update, :action => "/people/14").should ==
@@ -299,7 +299,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/form'
-    last_response.body.should == %q(<form action="/person" method="POST">)
+    last_response.body.should == %q(<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />)
   end
 
 #   it 'renders a form_for style tag' do
