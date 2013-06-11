@@ -14,13 +14,8 @@ module Sinatra
     def form(action, method=:get, options={}, &block)
       method_input = ''
       if method.is_a? Symbol
-        case method.to_s.downcase
-        when 'delete', 'update'
-          method_input = %Q(<input type="hidden" name="_method" value="#{method}" />)
-          method = :post
-        when 'create'
-          method = :post
-        end
+        method_input = %Q(<input type="hidden" name="_method" value="#{method}" />)
+        method = :post
       end
       action = "/#{action}" if action.is_a? Symbol
 
