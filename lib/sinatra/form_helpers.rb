@@ -13,7 +13,10 @@ module Sinatra
     # etc.
     def form(action, method=:get, options={}, &block)
       method_input = ''
-      if method.is_a? Symbol
+      # the docs suggest using ':create', ':update', or ':delete'
+      # but you can use any symbol for the method value
+      # allows for more than 3 forms on a single page
+      if method.is_a? Symbol      
         method_input = %Q(<input type="hidden" name="_method" value="#{method}" />)
         method = :post
       end
