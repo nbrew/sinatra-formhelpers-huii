@@ -1,5 +1,4 @@
-Sinatra::FormHelpers - Lightweight form helpers for Sinatra
-===========================================================
+# Sinatra::FormHelpers - Lightweight form helpers for Sinatra
 
 This plugin adds lightweight (3-5 lines each) form helpers to Sinatra that aid with
 common form and HTML tags.
@@ -10,16 +9,18 @@ common form and HTML tags.
 
 There are also helpers for: form, textarea, submit, image, radio, checkbox, and select
 
-Why Bother?
------------
+
+## Why Bother?
+
 After all, you can just write Haml or write your own helpers or hand-code raw HTML or whatever.  Well, here's some considerations:
 
 1. Helpers maintain correct state across form submissions (eg, on errors, form stays filled in)
-2. Generate automatic labels, valid CSS ID's, and <code>nested[names]</code> to make ORMs happy
+2. Generate automatic labels, valid CSS ID's, and `nested[names]` to make ORMs happy
 3. No Rails ultra-magic(tm) here. Just fast, simple code.
 
-Usage
------
+
+## Usage
+
 With Bundler/Isolate:
 
     gem 'sinatra-formhelpers-huii'
@@ -28,15 +29,16 @@ Then, include it in a Sinatra application:
 
     require 'sinatra/form_helpers'
 
-If you're subclassing <code>Sinatra::Base</code>, you also need to call <code>helpers</code> manually:
+If you're subclassing `Sinatra::Base`, you also need to call `helpers` manually:
 
     class MyApp < Sinatra::Base
       helpers Sinatra::FormHelpers
       # ...
     end
 
-Views
------
+
+## Views
+
 In your views, use these helpers to dynamically create form HTML elements.  Here's an example in ERB:
 
     <p>
@@ -58,9 +60,9 @@ In your views, use these helpers to dynamically create form HTML elements.  Here
 
     <%= submit %>
 
-Unlike the super-magic Rails <code>form\_for</code> method, the <code>form()</code> helper just takes a URL and method. (Note that <code>form()</code> will accept <code>:create</code>, <code>:update</code>, and <code>:delete</code> and include the special <code>\_method</code> hidden param for you.)
+Unlike the super-magic Rails `form_for` method, the `form()` helper just takes a URL and method. (Note that `form()` will accept `:create`, `:update`, and `:delete` and include the special `_method` hidden param for you.)
 
-To reduce repetition, use <code>fieldset()</code> to prefix fields with a namespace:
+To reduce repetition, use `fieldset()` to prefix fields with a namespace:
 
     <%= form('/users', :create) %>
 
@@ -79,21 +81,23 @@ To reduce repetition, use <code>fieldset()</code> to prefix fields with a namesp
     <%= submit 'Create account' %>
     <%= submit 'Cancel', :onclick => 'window.location=http://mydomain.com;return false' %>
 
-This will create fields named <code>user[first\_name]</code>, <code>user[last\_name]<code>, and so forth.
-
-Known Bugs
-----------
-* <code>form</code> doesn't close the HTML form tag unless a block is used.
+This will create fields named `user[first_name]`, `user[last_name]`, and so forth.
 
 
-Fixed Bugs
-----------
-* Currently <code>fieldset</code> does not return a <fieldset> tag properly.
+## Known Bugs
+
+* `fieldset` must be optional in `form`
+* `form` must take an URL string *AND* a namespace symbol.
+
+
+## Fixed Bugs
+
+* Currently `fieldset` does not return a <fieldset> tag properly.
 * The state of select tags was not persisted across form submissions.
 
 
-Authors
--------
+## Authors
+
 * [Initial efforts](https://github.com/twilson63/sinatra-formhelpers) (c) 2009 [Tom Wilson](https://github.com/twilson63).
 * [Additional efforts](https://github.com/nateware/sinatra-formhelpers) (c) 2011 [Nate Wiger](http://nateware.com).
 * [Further efforts](https://github.com/cymen/sinatra-formhelpers-ng) (c) 2013 [Cymen Vig](http://blog.cymen.org/).
