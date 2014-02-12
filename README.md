@@ -83,11 +83,12 @@ This will create fields named <code>user[first\_name]</code>, <code>user[last\_n
 
 Known Bugs
 ----------
-* Currently <code>fieldset</code> does not return a <fieldset> tag properly.
+* <code>form</code> doesn't close the HTML form tag unless a block is used.
 
 
 Fixed Bugs
 ----------
+* Currently <code>fieldset</code> does not return a <fieldset> tag properly.
 * The state of select tags was not persisted across form submissions.
 
 

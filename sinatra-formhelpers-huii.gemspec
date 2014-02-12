@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rack-test', '~> 0.6'
   spec.add_development_dependency 'rspec',     '~> 2.14'
   spec.add_development_dependency 'simplecov', '~> 0.8'
+  spec.add_development_dependency 'sinatra',   '~> 1.4'
   # spec.add_development_dependency 'pry',       '~> 0.9'
-
-  spec.add_runtime_dependency 'sinatra', '~> 1.4'
 end

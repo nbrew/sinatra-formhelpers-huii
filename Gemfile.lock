@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    sinatra-formhelpers-huii (1.9.0)
-      sinatra (~> 1.4)
+    sinatra-formhelpers-huii (1.9.1)
 
 GEM
   remote: https://rubygems.org/
@@ -44,4 +43,5 @@ DEPENDENCIES
   rake (~> 10.1)
   rspec (~> 2.14)
   simplecov (~> 0.8)
+  sinatra (~> 1.4)
   sinatra-formhelpers-huii!
