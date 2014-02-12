@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'bacon'
-gem 'rack-test'
+# Specify your gem's dependencies in bitly_quickly.gemspec
+gemspec

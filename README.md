@@ -22,7 +22,7 @@ Usage
 -----
 With Bundler/Isolate:
 
-    gem 'sinatra-formhelpers-ng'
+    gem 'sinatra-formhelpers-huii'
 
 Then, include it in a Sinatra application:
 
@@ -45,7 +45,7 @@ In your views, use these helpers to dynamically create form HTML elements.  Here
     </p>
 
     <%= form('/users', :post) %>
-    
+
     <%= input(:user, :first_name) %>
     <%= input(:user, :last_name) %>
 
