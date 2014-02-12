@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Sinatra::FormHelpers in app" do
   it 'renders an anchor tag' do
     app.get '/link' do
-      erb "<%= link 'google', 'http://www.google.com', :title => 'Google' %>"
+      erb "<%= link 'google', 'http://www.google.com', title: 'Google' %>"
     end
 
     get '/link'
@@ -58,7 +58,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders an input tag type text with @params' do
     app.get '/tom' do
-      @params = { :person => {"first_name" => "Tom"}}
+      @params = { person: {"first_name" => "Tom"}}
       erb "<%= input :person, :first_name %>"
     end
 
@@ -95,7 +95,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders a textarea tag with @params' do
     app.get '/notes2' do
-      @params = { :person => {"notes" => "This is a note"}}
+      @params = { person: {"notes" => "This is a note"}}
       erb "<%= textarea :person, :notes %>"
     end
 
@@ -105,7 +105,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders a textarea tag with @params' do
     app.get '/img' do
-      erb "<%= image '/images/hello.png', :alt => 'Lolcatz' %>"
+      erb "<%= image '/images/hello.png', alt: 'Lolcatz' %>"
     end
 
     get '/img'
@@ -180,7 +180,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders a select tag with selected option' do
     app.get '/select2' do
-      @params = { :person => {"relationship" => "CoWorker"}}
+      @params = { person: {"relationship" => "CoWorker"}}
       erb "<%= select :person, :relationship, ['Friend','CoWorker','Lead'] %>"
     end
 
@@ -201,7 +201,7 @@ describe "Sinatra::FormHelpers in app" do
 
   it 'renders a hidden tag with value' do
     app.get '/hidden2' do
-      erb '<%= hidden :person, :id, :value => 1 %>'
+      erb '<%= hidden :person, :id, value: 1 %>'
     end
 
     get '/hidden2'
@@ -224,7 +224,7 @@ describe "Sinatra::FormHelpers in app" do
   <%= f.input(:first_name) %>
   <%= f.input(:last_name) %>
 
-  <%= f.input(:email, :size => 40) %>
+  <%= f.input(:email, size: 40) %>
 
   <%= f.password(:password) %>
   <%= f.password(:confirm_password) %>

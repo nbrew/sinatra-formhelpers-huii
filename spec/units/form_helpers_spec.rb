@@ -6,7 +6,7 @@ describe "Sinatra::FormHelpers methods" do
   end
 
   it 'renders a form tag' do
-    expect( fh.form(:person, :update, :action => "/people/14") ).to eq(
+    expect( fh.form(:person, :update, action: "/people/14") ).to eq(
       '<form action="/people/14" method="post"><input type="hidden" name="_method" value="update" />'
     )
   end
@@ -35,7 +35,7 @@ describe "Sinatra::FormHelpers methods" do
   end
 
   it 'renders a nested form tag with different action and namespace' do
-    expect( fh.form(:person, :create, :action => "/people") do |f|
+    expect( fh.form(:person, :create, action: "/people") do |f|
       f.input(:name)
     end ).to eq( '<form action="/people" method="post"><input type="hidden" name="_method" value="create" /><fieldset>' +
       '<input id="person_name" name="person[name]" type="text" />' +
@@ -83,7 +83,7 @@ describe "Sinatra::FormHelpers methods" do
   end
 
   it 'renders a form checkbox tag' do
-    expect( fh.checkbox(:person, :gender, %w[M F], :join => '<br />') ).to eq(
+    expect( fh.checkbox(:person, :gender, %w[M F], join: '<br />') ).to eq(
       '<input id="person_gender_m" name="person[gender][]" type="checkbox" value="M" /><label for="person_gender_m">M</label><br />' +
       '<input id="person_gender_f" name="person[gender][]" type="checkbox" value="F" /><label for="person_gender_f">F</label>'
     )
@@ -108,7 +108,7 @@ describe "Sinatra::FormHelpers methods" do
   end
 
   it 'supports multiple values for checkboxes' do
-    fh.params = {:user => {'devices' => ['iPhone', 'iPad'] }}
+    fh.params = {user: {'devices' => ['iPhone', 'iPad'] }}
     expect( fh.checkbox(:user, :devices, ['iPhone', 'iPad', 'iPod', 'iPoop']) ).to eq(
       "<input checked=\"checked\" id=\"user_devices_iphone\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPhone\" /><label for=\"user_devices_iphone\">iPhone</label> <input checked=\"checked\" id=\"user_devices_ipad\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPad\" /><label for=\"user_devices_ipad\">iPad</label> <input id=\"user_devices_ipod\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPod\" /><label for=\"user_devices_ipod\">iPod</label> <input id=\"user_devices_ipoop\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPoop\" /><label for=\"user_devices_ipoop\">iPoop</label>"
     )
