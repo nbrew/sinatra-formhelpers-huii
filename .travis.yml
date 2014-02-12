@@ -8,4 +8,4 @@ branches:
   only:
     - master
 
-install: "bundle --deployment --without development production --jobs 4"
+install: "bundle --jobs 4"
