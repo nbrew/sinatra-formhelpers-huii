@@ -214,7 +214,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/form'
-    expect( last_response.body ).to eq( %q(<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />) )
+    expect( last_response.body ).to eq( %q(<form action="/person" method="post"><input type="hidden" name="_method" value="create" />) )
   end
 
   it 'renders a fieldset group' do

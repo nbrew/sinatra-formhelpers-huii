@@ -78,6 +78,25 @@ To reduce repetition, use `fieldset()` to prefix fields with a namespace:
       <%= f.radio(:gender, ['M', 'F']) %>
     <% end %>
 
+    </form> <-- You need to close it manually if you are not passing a block
+
+    <%= submit 'Create account' %>
+    <%= submit 'Cancel', :onclick => 'window.location=http://mydomain.com;return false' %>
+
+or
+
+    <%= form(:user, :post, action: '/users') do |f| %> <-- This will create a fieldset automatically
+      <%= f.input(:first_name) %>
+      <%= f.input(:last_name) %>
+
+      <%= f.input(:email, :size => 40) %>
+
+      <%= f.password(:password) %>
+      <%= f.password(:confirm_password) %>
+
+      <%= f.radio(:gender, ['M', 'F']) %>
+    <% end %>
+
     <%= submit 'Create account' %>
     <%= submit 'Cancel', :onclick => 'window.location=http://mydomain.com;return false' %>
 
@@ -86,7 +105,6 @@ This will create fields named `user[first_name]`, `user[last_name]`, and so fort
 ## Known Bugs
 
 * `fieldset` must be optional in `form`
-* `form` must take an URL string *AND* a namespace symbol.
 
 
 ## Fixed Bugs

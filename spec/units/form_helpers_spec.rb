@@ -2,24 +2,24 @@ require 'spec_helper'
 
 describe "Sinatra::FormHelpers methods" do
   it 'renders an anchor tag' do
-    expect( fh.form(:person, :create) ).to eq( '<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />' )
+    expect( fh.form(:person, :create) ).to eq( '<form action="/person" method="post"><input type="hidden" name="_method" value="create" />' )
   end
 
   it 'renders a form tag' do
     expect( fh.form(:person, :update, :action => "/people/14") ).to eq(
-      '<form action="/people/14" method="POST"><input type="hidden" name="_method" value="update" />'
+      '<form action="/people/14" method="post"><input type="hidden" name="_method" value="update" />'
     )
   end
 
   it 'renders a form tag (2)' do
     expect( fh.form("/people/7", :delete) ).to eq(
-      '<form action="/people/7" method="POST"><input type="hidden" name="_method" value="delete" />'
+      '<form action="/people/7" method="post"><input type="hidden" name="_method" value="delete" />'
     )
   end
 
   it 'renders a form tag (3)' do
     expect( fh.form("/people", :create) ).to eq(
-      '<form action="/people" method="POST"><input type="hidden" name="_method" value="create" />'
+      '<form action="/people" method="post"><input type="hidden" name="_method" value="create" />'
     )
   end
 
@@ -27,9 +27,18 @@ describe "Sinatra::FormHelpers methods" do
     expect( fh.form(:person, :create) do |f|
       # f.input(:first_name)
       f.input(:last_name)
-    end ).to eq( '<form action="/person" method="POST"><input type="hidden" name="_method" value="create" /><fieldset>' +
+    end ).to eq( '<form action="/person" method="post"><input type="hidden" name="_method" value="create" /><fieldset>' +
       # '<input id="person_first_name" name="person[first_name]" type="text" />' +
       '<input id="person_last_name" name="person[last_name]" type="text" />' +
+      '</fieldset></form>'
+    )
+  end
+
+  it 'renders a nested form tag with different action and namespace' do
+    expect( fh.form(:person, :create, :action => "/people") do |f|
+      f.input(:name)
+    end ).to eq( '<form action="/people" method="post"><input type="hidden" name="_method" value="create" /><fieldset>' +
+      '<input id="person_name" name="person[name]" type="text" />' +
       '</fieldset></form>'
     )
   end
