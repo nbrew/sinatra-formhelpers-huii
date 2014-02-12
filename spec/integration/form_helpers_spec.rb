@@ -7,7 +7,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/link'
-    last_response.body.should == %q(<a href="http://www.google.com" title="Google">google</a>)
+    expect( last_response.body ).to eq( %q(<a href="http://www.google.com" title="Google">google</a>) )
   end
 
   it 'renders a label tag' do
@@ -16,7 +16,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/label'
-    last_response.body.should == %q(<label for="person_first_name">First Name</label>)
+    expect( last_response.body ).to eq( %q(<label for="person_first_name">First Name</label>) )
   end
 
   it 'renders a label tag with display input' do
@@ -25,7 +25,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/hello'
-    last_response.body.should == %q(<label for="person_first_name">Hello World</label>)
+    expect( last_response.body ).to eq( %q(<label for="person_first_name">Hello World</label>) )
   end
 
   it 'renders an input tag type text without @params' do
@@ -34,8 +34,8 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/text'
-    last_response.body.should =~ /name="person\[first_name\]"/
-    last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" />)
+    expect( last_response.body ).to match( /name="person\[first_name\]"/ )
+    expect( last_response.body ).to eq( %q(<input id="person_first_name" name="person[first_name]" type="text" />) )
   end
 
   it 'accepts an input tag with custom type option' do
@@ -44,7 +44,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/input-with-custom-type'
-    last_response.body.should == '<input id="person_password" name="person[password]" type="password" />'
+    expect( last_response.body ).to eq( '<input id="person_password" name="person[password]" type="password" />' )
   end
 
   it 'renders an input tag type text with single arg' do
@@ -53,7 +53,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/q'
-    last_response.body.should == %q(<input id="q" name="q" type="text" />)
+    expect( last_response.body ).to eq( %q(<input id="q" name="q" type="text" />) )
   end
 
   it 'renders an input tag type text with @params' do
@@ -63,7 +63,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/tom'
-    last_response.body.should == %q(<input id="person_first_name" name="person[first_name]" type="text" value="Tom" />)
+    expect( last_response.body ).to eq( %q(<input id="person_first_name" name="person[first_name]" type="text" value="Tom" />) )
   end
 
   it 'renders a password tag type password' do
@@ -72,7 +72,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/password'
-    last_response.body.should == '<input id="person_password" name="person[password]" type="password" />'
+    expect( last_response.body ).to eq( '<input id="person_password" name="person[password]" type="password" />' )
   end
 
   it 'renders a button tag type button' do
@@ -81,7 +81,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/button'
-    last_response.body.should == '<input id="button_new" name="button" type="button" value="new" />'
+    expect( last_response.body ).to eq( '<input id="button_new" name="button" type="button" value="new" />' )
   end
 
   it 'renders an textarea tag type text without @params' do
@@ -90,7 +90,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/notes?person[notes]=Yeppers'
-    last_response.body.should == %q(<textarea id="person_notes" name="person[notes]">Yeppers</textarea>)
+    expect( last_response.body ).to eq( %q(<textarea id="person_notes" name="person[notes]">Yeppers</textarea>) )
   end
 
   it 'renders a textarea tag with @params' do
@@ -100,7 +100,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/notes2'
-    last_response.body.should == %q(<textarea id="person_notes" name="person[notes]">This is a note</textarea>)
+    expect( last_response.body ).to eq( %q(<textarea id="person_notes" name="person[notes]">This is a note</textarea>) )
   end
 
   it 'renders a textarea tag with @params' do
@@ -109,7 +109,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/img'
-    last_response.body.should == '<img alt="Lolcatz" src="/images/hello.png" />'
+    expect( last_response.body ).to eq( '<img alt="Lolcatz" src="/images/hello.png" />' )
   end
 
   it 'renders an input tag with a submit type' do
@@ -118,7 +118,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/sub'
-    last_response.body.should == '<input id="button_create" name="submit" type="submit" value="Create" />'
+    expect( last_response.body ).to eq( '<input id="button_create" name="submit" type="submit" value="Create" />' )
   end
 
   it 'renders an input tag with a submit type with zero args' do
@@ -127,7 +127,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/create'
-    last_response.body.should == '<input id="button_submit" name="submit" type="submit" value="Submit" />'
+    expect( last_response.body ).to eq( '<input id="button_submit" name="submit" type="submit" value="Submit" />' )
   end
 
   it 'renders an input tag with a checkbox type' do
@@ -136,8 +136,9 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/check'
-    last_response.body.should ==
+    expect( last_response.body ).to eq(
       '<input id="person_active_yes" name="person[active]" type="checkbox" value="Yes" /><label for="person_active_yes">Yes</label>'
+    )
   end
 
   it 'renders an input tag with a multiple checkbox type' do
@@ -146,10 +147,11 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/check2'
-    last_response.body.should ==
+    expect( last_response.body ).to eq(
       '<input id="person_eyes_1" name="person[eyes][]" type="checkbox" value="1" /><label for="person_eyes_1">1</label> ' +
       '<input id="person_eyes_2" name="person[eyes][]" type="checkbox" value="2" /><label for="person_eyes_2">2</label> ' +
       '<input id="person_eyes_3" name="person[eyes][]" type="checkbox" value="3" /><label for="person_eyes_3">3</label>'
+    )
   end
 
   it 'renders an input tag with a radio type' do
@@ -158,10 +160,11 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/radio'
-    last_response.body.should ==
-      "<input id=\"person_gender_m\" name=\"person[gender]\" type=\"radio\" value=\"M\" /><label for=\"person_gender_m\">Male</label> " +
-      "<input id=\"person_gender_f\" name=\"person[gender]\" type=\"radio\" value=\"F\" /><label for=\"person_gender_f\">Female</label> " +
-      "<input id=\"person_gender_other\" name=\"person[gender]\" type=\"radio\" value=\"Other\" /><label for=\"person_gender_other\">Other</label>"
+    expect( last_response.body ).to eq(
+      %(<input id="person_gender_m" name="person[gender]" type="radio" value="M" /><label for="person_gender_m">Male</label> ) +
+      %(<input id="person_gender_f" name="person[gender]" type="radio" value="F" /><label for="person_gender_f">Female</label> ) +
+      %(<input id="person_gender_other" name="person[gender]" type="radio" value="Other" /><label for="person_gender_other">Other</label>)
+    )
   end
 
   it 'renders a select tag' do
@@ -170,9 +173,9 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/select'
-    last_response.body.should == '<select id="person_relationship" name="person[relationship]">' +
+    expect( last_response.body ).to eq( '<select id="person_relationship" name="person[relationship]">' +
       '<option value="Friend">Friend</option><option value="CoWorker">CoWorker</option>' +
-      '<option value="Lead">Lead</option></select>'
+      '<option value="Lead">Lead</option></select>' )
   end
 
   it 'renders a select tag with selected option' do
@@ -182,9 +185,9 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/select2'
-    last_response.body.should == '<select id="person_relationship" name="person[relationship]">' +
+    expect( last_response.body ).to eq( '<select id="person_relationship" name="person[relationship]">' +
       '<option value="Friend">Friend</option><option selected="selected" value="CoWorker">CoWorker</option>' +
-      '<option value="Lead">Lead</option></select>'
+      '<option value="Lead">Lead</option></select>' )
   end
 
   it 'renders a hidden tag with single arg' do
@@ -193,7 +196,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/hidden'
-    last_response.body.should == %q(<input id="q" name="q" type="hidden" />)
+    expect( last_response.body ).to eq( %q(<input id="q" name="q" type="hidden" />) )
   end
 
   it 'renders a hidden tag with value' do
@@ -202,7 +205,7 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/hidden2'
-    last_response.body.should == '<input id="person_id" name="person[id]" type="hidden" value="1" />'
+    expect( last_response.body ).to eq( '<input id="person_id" name="person[id]" type="hidden" value="1" />' )
   end
 
   it 'renders a form tag' do
@@ -211,23 +214,8 @@ describe "Sinatra::FormHelpers in app" do
     end
 
     get '/form'
-    last_response.body.should == %q(<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />)
+    expect( last_response.body ).to eq( %q(<form action="/person" method="POST"><input type="hidden" name="_method" value="create" />) )
   end
-
-#   it 'renders a form_for style tag' do
-#     app.get '/form_for' do
-#       erb <<-EndTemplate
-# <% form(:person, :create) do |f| %>
-#   <%= f.input(:login) %>
-#   <%= f.password(:password) %>
-#   <%= submit %>
-# <% end %>
-# EndTemplate
-#     end
-#
-#     get '/form_for'
-#     last_response.body.should == %q(<form action="/person" method="POST">)
-#   end
 
   it 'renders a fieldset group' do
     app.get '/fieldset' do
@@ -248,7 +236,15 @@ EndTemplate
 end
 
     get '/fieldset'
-    last_response.body.should ==
-      "  <input id=\"user_first_name\" name=\"user[first_name]\" type=\"text\" />\n  <input id=\"user_last_name\" name=\"user[last_name]\" type=\"text\" />\n\n  <input id=\"user_email\" name=\"user[email]\" size=\"40\" type=\"text\" />\n\n  <input id=\"user_password\" name=\"user[password]\" type=\"password\" />\n  <input id=\"user_confirm_password\" name=\"user[confirm_password]\" type=\"password\" />\n\n  <input id=\"user_gender_m\" name=\"user[gender]\" type=\"radio\" value=\"M\" /><label for=\"user_gender_m\">M</label> <input id=\"user_gender_f\" name=\"user[gender]\" type=\"radio\" value=\"F\" /><label for=\"user_gender_f\">F</label>\n<input id=\"button_submit\" name=\"submit\" type=\"submit\" value=\"Submit\" />"
+    expect( last_response.body ).to eq(
+      %(  <input id="user_first_name" name="user[first_name]" type="text" />\n) +
+      %(  <input id="user_last_name" name="user[last_name]" type="text" />\n\n) +
+      %(  <input id="user_email" name="user[email]" size="40" type="text" />\n\n) +
+      %(  <input id="user_password" name="user[password]" type="password" />\n) +
+      %(  <input id="user_confirm_password" name="user[confirm_password]" type="password" />\n\n) +
+      %(  <input id="user_gender_m" name="user[gender]" type="radio" value="M" /><label for="user_gender_m">M</label>) +
+      %( <input id="user_gender_f" name="user[gender]" type="radio" value="F" /><label for="user_gender_f">F</label>\n) +
+      %(<input id="button_submit" name="submit" type="submit" value="Submit" />)
+    )
   end
 end

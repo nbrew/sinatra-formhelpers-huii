@@ -83,7 +83,6 @@ To reduce repetition, use `fieldset()` to prefix fields with a namespace:
 
 This will create fields named `user[first_name]`, `user[last_name]`, and so forth.
 
-
 ## Known Bugs
 
 * `fieldset` must be optional in `form`
@@ -94,6 +93,11 @@ This will create fields named `user[first_name]`, `user[last_name]`, and so fort
 
 * Currently `fieldset` does not return a <fieldset> tag properly.
 * The state of select tags was not persisted across form submissions.
+
+
+## Running tests
+
+Just run `bundle exec rake` or `bundle exec rspec` or `rspec`.
 
 
 ## Authors
