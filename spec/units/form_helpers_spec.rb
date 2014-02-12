@@ -44,6 +44,22 @@ describe "Sinatra::FormHelpers methods" do
       '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea></fieldset>'
   end
 
+  it 'renders a fieldset tag with an input' do
+    fh.fieldset(:user) do |f|
+      f.input(:last_name)
+    end.should == '<fieldset><input id="user_last_name" name="user[last_name]" type="text" /></fieldset>'
+  end
+
+  it 'renders an empty fieldset tag' do
+    fh.fieldset(:user) do |f|
+    end.should == '<fieldset></fieldset>'
+  end
+
+  it 'renders a fieldset tag with legend' do
+    fh.fieldset(:user, 'Oh boy!') do |f|
+    end.should == '<fieldset><legend>Oh boy!</legend></fieldset>'
+  end
+
   it 'renders a link tag' do
     fh.link('http://google.com').should == '<a href="http://google.com">http://google.com</a>'
   end

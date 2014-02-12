@@ -30,7 +30,7 @@ module Sinatra
     def fieldset(obj, legend = nil, &block)
       raise ArgumentError, "Missing block to fieldset()" unless block_given?
       out = yield Fieldset.new(self, obj)
-      '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + out + '</fieldset>'
+      '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + out.to_s + '</fieldset>'
     end
 
     # Link to a URL
