@@ -11,12 +11,12 @@ module Sinatra
     # textarea :person, :notes
     #
     # etc.
-    def form(action, method=:get, options={}, &block)
+    def form(action, method = :get, options = {}, &block)
       method_input = ''
       # the docs suggest using ':create', ':update', or ':delete'
       # but you can use any symbol for the method value
       # allows for more than 3 forms on a single page
-      if method.is_a? Symbol      
+      if method.is_a? Symbol
         method_input = %Q(<input type="hidden" name="_method" value="#{method}" />)
         method = :post
       end
@@ -27,29 +27,29 @@ module Sinatra
       out
     end
 
-    def fieldset(obj, legend=nil, &block)
+    def fieldset(obj, legend = nil, &block)
       raise ArgumentError, "Missing block to fieldset()" unless block_given?
       out = yield Fieldset.new(self, obj)
       '<fieldset>' + (legend.nil? ? '' : "<legend>#{fast_escape_html(legend)}</legend>") + out + '</fieldset>'
     end
 
     # Link to a URL
-    def link(content, href=content, options={})
+    def link(content, href = content, options = {})
       tag :a, content, options.merge(:href => href)
     end
 
     # Link to an image
-    def image(src, options={})
+    def image(src, options = {})
       single_tag :img, options.merge(:src => src)
     end
 
     # Form field label
-    def label(obj, field, display = "", options={})
+    def label(obj, field, display = "", options = {})
       tag :label, (display.nil? || display == '') ? titleize(field.to_s) : display, options.merge(:for => css_id(obj, field))
     end
 
     # Form text input.  Specify the value as :value => 'foo'
-    def input(obj, field=nil, options={})
+    def input(obj, field = nil, options = {})
       value = param_or_default(obj, field, options[:value])
       single_tag :input, options.merge(
         :type => options[:type] || "text",
@@ -60,12 +60,12 @@ module Sinatra
     end
 
     # Form password input.  Specify the value as :value => 'foo'
-    def password(obj, field=nil, options={})
+    def password(obj, field = nil, options = {})
       input(obj, field, options.merge(:type => 'password'))
     end
 
     # Form textarea box.
-    def textarea(obj, field=nil, content='', options={})
+    def textarea(obj, field = nil, content = '', options = {})
       content = param_or_default(obj, field, content)
       tag :textarea, content, options.merge(
         :id   => css_id(obj, field),
@@ -74,25 +74,25 @@ module Sinatra
     end
 
     # Form submit tag.
-    def submit(value='Submit', options={})
+    def submit(value = 'Submit', options = {})
       single_tag :input, {:name => "submit", :type => "submit",
                           :value => value, :id => css_id('button', value)}.merge(options)
     end
 
     # Form reset tag.  Does anyone use these anymore?
-    def reset(value='Reset', options={})
+    def reset(value = 'Reset', options = {})
       single_tag :input, {:name => "reset", :type => "reset",
                           :value => value, :id => css_id('button', value)}.merge(options)
     end
 
     # General purpose button, usually these need JavaScript hooks.
-    def button(value, options={})
+    def button(value, options = {})
       single_tag :input, {:name => "button", :type => "button",
                           :value => value, :id => css_id('button', value)}.merge(options)
     end
 
     # Form checkbox.  Specify an array of values to get a checkbox group.
-    def checkbox(obj, field, values, options={})
+    def checkbox(obj, field, values, options = {})
       join = options.delete(:join) || ' '
       labs = options.delete(:label)
       vals = param_or_default(obj, field, [])
@@ -107,7 +107,7 @@ module Sinatra
     end
 
     # Form radio input.  Specify an array of values to get a radio group.
-    def radio(obj, field, values, options={})
+    def radio(obj, field, values, options = {})
       #content = @params[obj] && @params[obj][field.to_s] == value ? "true" : ""
       # , :checked => content
       join = options.delete(:join) || ' '
@@ -123,7 +123,7 @@ module Sinatra
     end
 
     # Form select dropdown.  Currently only single-select (not multi-select) is supported.
-    def select(obj, field, values, options={})
+    def select(obj, field, values, options = {})
       value = param_or_default(obj, field, options[:value])
       content = ""
       Array(values).each do |val|
@@ -143,7 +143,7 @@ module Sinatra
     # Standard open and close tags
     # EX : tag :h1, "shizam", :title => "shizam"
     # => <h1 title="shizam">shizam</h1>
-    def tag(name, content, options={})
+    def tag(name, content, options = {})
       "<#{name.to_s}" +
         (options.length > 0 ? " #{hash_to_html_attrs(options)}" : '') +
         (content.nil? ? '>' : ">#{content}</#{name}>")
@@ -152,7 +152,7 @@ module Sinatra
     # Standard single closing tags
     # single_tag :img, :src => "images/google.jpg"
     # => <img src="images/google.jpg" />
-    def single_tag(name, options={})
+    def single_tag(name, options = {})
       "<#{name.to_s} #{hash_to_html_attrs(options)} />"
     end
 
@@ -172,7 +172,7 @@ module Sinatra
       end
     end
 
-    def hash_to_html_attrs(options={})
+    def hash_to_html_attrs(options = {})
       html_attrs = ""
       options.keys.sort.each do |key|
         next if options[key].nil? # do not include empty attributes
