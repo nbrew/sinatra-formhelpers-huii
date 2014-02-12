@@ -1,5 +1,7 @@
 # Sinatra::FormHelpers - Lightweight form helpers for Sinatra
 
+[![Build Status](https://travis-ci.org/ollie/sinatra-formhelpers-huii.png?branch=master)](https://travis-ci.org/ollie/sinatra-formhelpers-huii)
+
 This plugin adds lightweight (3-5 lines each) form helpers to Sinatra that aid with
 common form and HTML tags.
 
