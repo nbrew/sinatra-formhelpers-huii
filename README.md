@@ -95,4 +95,5 @@ Authors
 -------
 * [Initial efforts](https://github.com/twilson63/sinatra-formhelpers) (c) 2009 [Tom Wilson](https://github.com/twilson63).
 * [Additional efforts](https://github.com/nateware/sinatra-formhelpers) (c) 2011 [Nate Wiger](http://nateware.com).
-* Further efforts (c) 2013 [Cymen Vig](http://blog.cymen.org/).
+* [Further efforts](https://github.com/cymen/sinatra-formhelpers-ng) (c) 2013 [Cymen Vig](http://blog.cymen.org/).
+* [Other efforts](https://github.com/ollie/sinatra-formhelpers-huii) (c) 2014 [Oldrich Vetesnik](https://github.com/ollie).

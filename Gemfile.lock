@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     sinatra-formhelpers-huii (1.9.0)
-      sinatra (>= 1.4)
+      sinatra (~> 1.4)
 
 GEM
   remote: https://rubygems.org/
