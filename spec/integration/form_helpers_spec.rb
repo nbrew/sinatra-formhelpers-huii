@@ -75,6 +75,15 @@ describe "Sinatra::FormHelpers in app" do
     expect( last_response.body ).to eq( '<input id="person_password" name="person[password]" type="password" />' )
   end
 
+  it 'renders an email tag type' do
+    app.get '/email' do
+      erb "<%= email :person, :password %>"
+    end
+
+    get '/email'
+    expect( last_response.body ).to eq( '<input id="person_password" name="person[password]" type="email" />' )
+  end
+
   it 'renders a button tag type button' do
     app.get '/button' do
       erb "<%= button :new %>"
@@ -215,6 +224,24 @@ describe "Sinatra::FormHelpers in app" do
 
     get '/form'
     expect( last_response.body ).to eq( %q(<form action="/person" method="post"><input type="hidden" name="_method" value="create" />) )
+  end
+
+  it 'renders a form with a block' do
+    app.get '/form' do
+      erb <<-EndTemplate
+<%= form :person, :create do |f| %>
+  <%= f.input(:first_name) %>
+<% end %>
+EndTemplate
+end
+
+    get '/form'
+    expect( last_response.body ).to eq(
+      %(<form action="/person" method="post"><input type="hidden" name="_method" value="create" />)
+      # %(<form action="/person" method="post"><input type="hidden" name="_method" value="create">\n) +
+      # %(  <input id="person_first_name" name="person[first_name]" type="text" />\n) +
+      # %(</form>)
+    )
   end
 
   it 'renders a fieldset group' do

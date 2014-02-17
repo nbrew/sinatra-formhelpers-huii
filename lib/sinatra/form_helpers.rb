@@ -64,6 +64,11 @@ module Sinatra
       input(obj, field, options.merge(type: 'password'))
     end
 
+    # Email input field
+    def email(obj, field = nil, options = {})
+      input(obj, field, options.merge(type: 'email'))
+    end
+
     # Form textarea box.
     def textarea(obj, field = nil, content = '', options = {})
       content = param_or_default(obj, field, content)

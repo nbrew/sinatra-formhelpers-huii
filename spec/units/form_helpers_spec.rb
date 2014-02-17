@@ -93,6 +93,10 @@ describe "Sinatra::FormHelpers methods" do
     expect( fh.input(:q) ).to eq( %q(<input id="q" name="q" type="text" />) )
   end
 
+  it 'renders a minimal email tag' do
+    expect( fh.email(:q) ).to eq( %q(<input id="q" name="q" type="email" />) )
+  end
+
   it 'renders a minimal textarea tag' do
     expect( fh.textarea(:r) ).to eq( %q(<textarea id="r" name="r"></textarea>) )
   end

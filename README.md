@@ -104,9 +104,29 @@ or
 
 This will create fields named `user[first_name]`, `user[last_name]`, and so forth.
 
+## List of helpers so far
+
+* `form`
+* `fieldset`
+* `link`
+* `image`
+* `label`
+* `input`
+* `password`
+* `email`
+* `textarea`
+* `submit`
+* `reset`
+* `button`
+* `checkbox`
+* `radio`
+* `select`
+* `hidden`
+
 ## Known Bugs
 
 * `fieldset` must be optional in `form`
+* `<%= form(:user, :post, action: '/users') do |f| %>` doesn't work in eRB, but works in Slim. Crap. :/
 
 
 ## Fixed Bugs
