@@ -22,7 +22,7 @@ module Sinatra
       end
       action = "/#{action}" if action.is_a? Symbol
 
-      out = tag(:form, nil, { action: action, method: method.to_s }.merge(options)) + method_input
+      out = tag(:form, nil, { action: action, method: method.to_s }.merge(options), false) + method_input
       out << fieldset(action, &block) + '</form>' if block_given?
       out
     end
@@ -168,10 +168,12 @@ module Sinatra
     # Standard open and close tags
     # EX : tag :h1, "shizam", title: "shizam"
     # => <h1 title="shizam">shizam</h1>
-    def tag(name, content, options = {})
-      "<#{name.to_s}" +
-        (options.length > 0 ? " #{hash_to_html_attrs(options)}" : '') +
-        (content.nil? ? '>' : ">#{content}</#{name}>")
+    def tag(name, content, options = {}, close = true)
+      attributes = " #{ hash_to_html_attrs(options) }" if options.length > 0
+      open_tag   = "<#{ name }#{ attributes }>"
+      close_tag  = "</#{ name }>" if close
+
+      "#{ open_tag }#{ content }#{ close_tag }"
     end
 
     # Standard single closing tags

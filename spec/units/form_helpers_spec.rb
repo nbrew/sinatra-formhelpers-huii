@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe "Sinatra::FormHelpers methods" do
+RSpec.describe "Sinatra::FormHelpers methods" do
   it 'renders an anchor tag' do
     expect( fh.form(:person, :create) ).to eq( '<form action="/person" method="post"><input type="hidden" name="_method" value="create" />' )
   end
@@ -55,6 +53,21 @@ describe "Sinatra::FormHelpers methods" do
       # '<input id="person_partners_5" name="person[partners]" type="radio" value="5" /> ' +
       # '<input id="person_partners_6" name="person[partners]" type="radio" value="6" />' +
       '<textarea id="person_comments" name="person[comments]">yo yo yo!</textarea></fieldset>'
+    )
+  end
+
+  it 'nests form elements arbitrarily with nil value' do
+    expect( fh.fieldset(:person) do |n|
+      # n.radio(:partners, 1..6)
+      n.textarea(:comments, nil)
+    end ).to eq( '<fieldset>' +
+      # '<input id="person_partners_1" name="person[partners]" type="radio" value="1" /> ' +
+      # '<input id="person_partners_2" name="person[partners]" type="radio" value="2" /> ' +
+      # '<input id="person_partners_3" name="person[partners]" type="radio" value="3" /> ' +
+      # '<input id="person_partners_4" name="person[partners]" type="radio" value="4" /> ' +
+      # '<input id="person_partners_5" name="person[partners]" type="radio" value="5" /> ' +
+      # '<input id="person_partners_6" name="person[partners]" type="radio" value="6" />' +
+      '<textarea id="person_comments" name="person[comments]"></textarea></fieldset>'
     )
   end
 

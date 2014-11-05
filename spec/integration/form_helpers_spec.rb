@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe "Sinatra::FormHelpers in app" do
+RSpec.describe "Sinatra::FormHelpers in app" do
   it 'renders an anchor tag' do
     app.get '/link' do
       erb "<%= link 'google', 'http://www.google.com', title: 'Google' %>"
@@ -112,7 +110,17 @@ describe "Sinatra::FormHelpers in app" do
     expect( last_response.body ).to eq( %q(<textarea id="person_notes" name="person[notes]">This is a note</textarea>) )
   end
 
-  it 'renders a textarea tag with @params' do
+  it 'renders a textarea tag with nil @params' do
+    app.get '/notes3' do
+      @params = { person: {"notes" => nil}}
+      erb "<%= textarea :person, :notes %>"
+    end
+
+    get '/notes3'
+    expect( last_response.body ).to eq( %q(<textarea id="person_notes" name="person[notes]"></textarea>) )
+  end
+
+  it 'renders an img tag with @params' do
     app.get '/img' do
       erb "<%= image '/images/hello.png', alt: 'Lolcatz' %>"
     end
