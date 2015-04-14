@@ -112,7 +112,7 @@ module Sinatra
     def checkbox(obj, field, values, options = {})
       join = options.delete(:join) || ' '
       labs = options.delete(:label)
-      vals = param_or_default(obj, field, [])
+      vals = param_or_default(obj, field, Array(options[:value]))
       ary = values.is_a?(Array) && values.length > 1 ? '[]' : ''
       Array(values).collect do |val|
         id, text = id_and_text_from_value(val)
@@ -133,7 +133,7 @@ module Sinatra
       # , checked: content
       join = options.delete(:join) || ' '
       labs = options.delete(:label)
-      vals = param_or_default(obj, field, [])
+      vals = param_or_default(obj, field, Array(options[:value]))
       Array(values).collect do |val|
         id, text = id_and_text_from_value(val)
         single_tag(:input, options.merge(
