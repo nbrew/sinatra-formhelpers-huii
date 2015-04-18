@@ -109,6 +109,16 @@ RSpec.describe "Sinatra::FormHelpers methods" do
     )
   end
 
+  it 'renders a form checkbox tag and checks passed value with boolean' do
+    expect( fh.checkbox(:person, :gender, true, value: false) ).to eq(
+      '<input id="person_gender_true" name="person[gender]" type="checkbox" value="true" /><label for="person_gender_true">true</label>'
+    )
+    expect( fh.checkbox(:person, :gender, true, value: true) ).to eq(
+      '<input checked="checked" id="person_gender_true" name="person[gender]" type="checkbox" value="true" /><label for="person_gender_true">true</label>'
+    )
+  end
+
+
   it 'renders a minimal text tag' do
     expect( fh.input(:q) ).to eq( %q(<input id="q" name="q" type="text" />) )
   end
