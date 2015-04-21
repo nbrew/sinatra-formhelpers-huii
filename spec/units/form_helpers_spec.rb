@@ -130,4 +130,28 @@ RSpec.describe "Sinatra::FormHelpers methods" do
       "<input checked=\"checked\" id=\"user_devices_iphone\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPhone\" /><label for=\"user_devices_iphone\">iPhone</label> <input checked=\"checked\" id=\"user_devices_ipad\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPad\" /><label for=\"user_devices_ipad\">iPad</label> <input id=\"user_devices_ipod\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPod\" /><label for=\"user_devices_ipod\">iPod</label> <input id=\"user_devices_ipoop\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPoop\" /><label for=\"user_devices_ipoop\">iPoop</label>"
     )
   end
+
+  describe "#select" do
+    it "renders a select tag" do
+      fh.params = {}
+      expect( fh.select(:video, :src_format, ['59.94i','59.94p','30p']) ).to eql(
+        '<select id="video_src_format" name="video[src_format]"><option value="59.94i">59.94i</option><option value="59.94p">59.94p</option><option value="30p">30p</option></select>'
+      )
+    end
+
+    it "selects value from passed value option" do
+      expect( fh.select(:video, :src_format, ['59.94i','59.94p','30p'], {value: '59.94i'}) ).to eq(
+        '<select id="video_src_format" name="video[src_format]"><option selected="selected" value="59.94i">59.94i</option><option value="59.94p">59.94p</option><option value="30p">30p</option></select>'
+      )
+    end
+
+    it "selects value from params" do
+      fh.params = {video: {:src_format => '59.94i'}}
+      expect( fh.select(:video, :src_format, ['59.94i','59.94p','30p']) ).to eq(
+        '<select id="video_src_format" name="video[src_format]"><option selected="selected" value="59.94i">59.94i</option><option value="59.94p">59.94p</option><option value="30p">30p</option></select>'
+      )
+    end
+
+  end
+
 end

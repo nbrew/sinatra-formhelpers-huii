@@ -149,7 +149,7 @@ module Sinatra
 
     # Form select dropdown.  Currently only single-select (not multi-select) is supported.
     def select(obj, field, values, options = {})
-      value = param_or_default(obj, field, options[:value])
+      value = param_or_default(obj, field, options.delete(:value))
       content = ""
       Array(values).each do |val|
         id, text = id_and_text_from_value(val)
@@ -165,7 +165,6 @@ module Sinatra
       input(obj, field, options.merge(type: 'hidden'))
     end
 
-    # Standard open and close tags
     # EX : tag :h1, "shizam", title: "shizam"
     # => <h1 title="shizam">shizam</h1>
     def tag(name, content, options = {}, close = true)
