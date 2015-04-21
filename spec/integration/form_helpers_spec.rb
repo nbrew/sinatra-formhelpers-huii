@@ -171,6 +171,19 @@ RSpec.describe "Sinatra::FormHelpers in app" do
     )
   end
 
+  it 'renders an input tag with a multiple checkbox type and maintains value' do
+    app.get '/check3' do
+      erb "<%= checkbox :person, :eyes, [1,2,3], value: 1 %>"
+    end
+
+    get '/check3'
+    expect( last_response.body ).to eq(
+      '<input checked="checked" id="person_eyes_1" name="person[eyes][]" type="checkbox" value="1" /><label for="person_eyes_1">1</label> ' +
+      '<input id="person_eyes_2" name="person[eyes][]" type="checkbox" value="2" /><label for="person_eyes_2">2</label> ' +
+      '<input id="person_eyes_3" name="person[eyes][]" type="checkbox" value="3" /><label for="person_eyes_3">3</label>'
+    )
+  end
+
   it 'renders an input tag with a radio type' do
     app.get '/radio' do
       erb "<%= radio :person, :gender, [['M','Male'],['F','Female'],'Other'] %>"
