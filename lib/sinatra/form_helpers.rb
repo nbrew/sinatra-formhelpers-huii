@@ -149,12 +149,13 @@ module Sinatra
 
     # Form select dropdown.  Currently only single-select (not multi-select) is supported.
     def select(obj, field, values, options = {})
-      value = param_or_default(obj, field, options.delete(:value))
+      value = (param_or_default(obj, field, options.delete(:value))).to_s
       content = ""
       Array(values).each do |val|
         id, text = id_and_text_from_value(val)
+        puts "id: #{id.class.name}(#{id}); value: #{value.class.name}(#{value}); #{id == value}"
         tag_options = { value: id }
-        tag_options[:selected] = 'selected' if id == value
+        tag_options[:selected] = 'selected' if id.to_s == value
         content << tag(:option, text, tag_options)
       end
       tag :select, content, options.merge(id: css_id(obj, field), name: "#{obj}[#{field}]")
