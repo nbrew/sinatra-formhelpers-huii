@@ -163,12 +163,31 @@ RSpec.describe "Sinatra::FormHelpers methods" do
     end
 
     it "selects value from params" do
-      fh.params = {video: {:src_format => '59.94i'}}
+      fh.params = {video: {'src_format' => '59.94i'}}
       expect( fh.select(:video, :src_format, ['59.94i','59.94p','30p']) ).to eq(
         '<select id="video_src_format" name="video[src_format]"><option selected="selected" value="59.94i">59.94i</option><option value="59.94p">59.94p</option><option value="30p">30p</option></select>'
       )
     end
 
+  end
+
+  describe "#param_or_default" do
+    describe "with no params" do
+      before do
+        fh.params = {}
+      end
+      it "returns the passed default value" do
+        expect( fh.param_or_default(:object, :field, 'stuff') ).to eq('stuff')
+      end
+    end
+    describe "with params" do
+      before do
+        fh.params = {object: {'field' => 'value'} }
+      end
+      it "returns the value from params" do
+        expect( fh.param_or_default(:object, :field, 'stuff') ).to eq('value')
+      end
+    end
   end
 
 end
