@@ -153,7 +153,6 @@ module Sinatra
       content = ""
       Array(values).each do |val|
         id, text = id_and_text_from_value(val)
-        puts "id: #{id.class.name}(#{id}); value: #{value.class.name}(#{value}); #{id == value}"
         tag_options = { value: id }
         tag_options[:selected] = 'selected' if id.to_s == value
         content << tag(:option, text, tag_options)
