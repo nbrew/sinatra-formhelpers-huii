@@ -279,7 +279,7 @@ end
 
   <%= f.radio(:gender, ['M', 'F']) %>
 <% end %>
-<%= submit %>
+<%= submit -%>
 EndTemplate
 end
 
